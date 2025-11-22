@@ -2,11 +2,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 
 import {
- 
+
+  Blend,
   ChevronDown,
   Grid3X3,
   LogOut,
- 
+  ShirtIcon,
+
 } from "lucide-react";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
@@ -21,19 +23,26 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    icon: <Grid3X3 />,
+    icon: <ShirtIcon />,
     name: "Clothing Management",
-    subItems: [{ name: "Category Management", path: "/dashboard", pro: false },
-    { name: "Collections Management", path: "/dashboard/collections", pro: false },
-    { name: "Product Management", path: "/dashboard/products", pro: false },
-    { name: "Variants Management", path: "/dashboard/variants", pro: false },
+    subItems: [
+      { name: "Category Management", path: "/app/category", pro: false },
+      { name: "Collections Management", path: "/app/collection", pro: false },
+      { name: "Product Management", path: "/app/products", pro: false },
     ],
   },
- 
+
 ];
 
 const othersItems: NavItem[] = [
-  
+ {
+    icon: <Blend />,
+    name: "Variant Management",
+    subItems: [
+      { name: "Colors", path: "/app/colors", pro: false },
+      { name: "Size", path: "/app/size", pro: false, },
+    ],
+  },
 ];
 
 const AppSidebar: React.FC = () => {
@@ -114,8 +123,8 @@ const AppSidebar: React.FC = () => {
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
               className={`group cursor-pointer ${!isExpanded && !isHovered
-                  ? "lg:justify-center"
-                  : "lg:justify-start"
+                ? "lg:justify-center"
+                : "lg:justify-start"
                 }`}
               style={{
                 position: 'relative',
