@@ -1,24 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router";
 
-// Assume these icons are imported from an icon library
 import {
-  BoxCubeIcon,
-  CalenderIcon,
-  ChevronDownIcon,
-  GridIcon,
-  HorizontaLDots,
-  ListIcon,
-  PageIcon,
-  PieChartIcon,
-  PlugInIcon,
-  TableIcon,
-  UserCircleIcon,
-} from "../icons";
+ 
+  ChevronDown,
+  Grid3X3,
+  LogOut,
+ 
+} from "lucide-react";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
-import SidebarWidget from "./SidebarWidget";
+
 
 type NavItem = {
   name: string;
@@ -29,73 +21,19 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    icon: <GridIcon />,
+    icon: <Grid3X3 />,
     name: "Clothing Management",
-    subItems: [{ name: "Category Management", path: "/", pro: false },
-    { name: "Collections Management", path: "/collections", pro: false },
-    { name: "Product Management", path: "/products", pro: false },
-    { name: "Variants Management", path: "/variants", pro: false },
+    subItems: [{ name: "Category Management", path: "/dashboard", pro: false },
+    { name: "Collections Management", path: "/dashboard/collections", pro: false },
+    { name: "Product Management", path: "/dashboard/products", pro: false },
+    { name: "Variants Management", path: "/dashboard/variants", pro: false },
     ],
   },
-  // {
-  //   icon: <CalenderIcon />,
-  //   name: "Calendar",
-  //   path: "/calendar",
-  // },
-  // {
-  //   icon: <UserCircleIcon />,
-  //   name: "User Profile",
-  //   path: "/profile",
-  // },
-  // {
-  //   name: "Forms",
-  //   icon: <ListIcon />,
-  //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  // },
-  // {
-  //   name: "Tables",
-  //   icon: <TableIcon />,
-  //   subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  // },
-  // {
-  //   name: "Pages",
-  //   icon: <PageIcon />,
-  //   subItems: [
-  //     { name: "Blank Page", path: "/blank", pro: false },
-  //     { name: "404 Error", path: "/error-404", pro: false },
-  //   ],
-  // },
+ 
 ];
 
 const othersItems: NavItem[] = [
-  //   {
-  //     icon: <PieChartIcon />,
-  //     name: "Charts",
-  //     subItems: [
-  //       { name: "Line Chart", path: "/line-chart", pro: false },
-  //       { name: "Bar Chart", path: "/bar-chart", pro: false },
-  //     ],
-  //   },
-  //   {
-  //     icon: <BoxCubeIcon />,
-  //     name: "UI Elements",
-  //     subItems: [
-  //       { name: "Alerts", path: "/alerts", pro: false },
-  //       { name: "Avatar", path: "/avatars", pro: false },
-  //       { name: "Badge", path: "/badge", pro: false },
-  //       { name: "Buttons", path: "/buttons", pro: false },
-  //       { name: "Images", path: "/images", pro: false },
-  //       { name: "Videos", path: "/videos", pro: false },
-  //     ],
-  //   },
-  //   {
-  //     icon: <PlugInIcon />,
-  //     name: "Authentication",
-  //     subItems: [
-  //       { name: "Sign In", path: "/signin", pro: false },
-  //       { name: "Sign Up", path: "/signup", pro: false },
-  //     ],
-  //   },
+  
 ];
 
 const AppSidebar: React.FC = () => {
@@ -175,27 +113,36 @@ const AppSidebar: React.FC = () => {
           {nav.subItems ? (
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
-              className={`menu-item group ${openSubmenu?.type === menuType && openSubmenu?.index === index
-                ? "menu-item-active"
-                : "menu-item-inactive"
-                } cursor-pointer ${!isExpanded && !isHovered
+              className={`group cursor-pointer ${!isExpanded && !isHovered
                   ? "lg:justify-center"
                   : "lg:justify-start"
                 }`}
+              style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%',
+                gap: '0.75rem',
+                padding: '0.5rem 0.75rem',
+                fontWeight: '500',
+                borderRadius: '0.5rem',
+                fontSize: '0.875rem',
+                backgroundColor: openSubmenu?.type === menuType && openSubmenu?.index === index ? '#4a5568' : 'transparent',
+                color: openSubmenu?.type === menuType && openSubmenu?.index === index ? '#ffffff' : '#ffffff'
+              }}
             >
               <span
-                className={`menu-item-icon-size  ${openSubmenu?.type === menuType && openSubmenu?.index === index
-                  ? "menu-item-icon-active"
-                  : "menu-item-icon-inactive"
-                  }`}
+                style={{
+                  color: openSubmenu?.type === menuType && openSubmenu?.index === index ? '#ffffff' : '#ffffff'
+                }}
               >
                 {nav.icon}
               </span>
               {(isExpanded || isHovered || isMobileOpen) && (
-                <span className="menu-item-text">{nav.name}</span>
+                <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>{nav.name}</span>
               )}
               {(isExpanded || isHovered || isMobileOpen) && (
-                <ChevronDownIcon
+                <ChevronDown
                   className={`ml-auto w-5 h-5 transition-transform duration-200 ${openSubmenu?.type === menuType &&
                     openSubmenu?.index === index
                     ? "rotate-180 text-brand-500"
@@ -208,19 +155,31 @@ const AppSidebar: React.FC = () => {
             nav.path && (
               <Link
                 to={nav.path}
-                className={`menu-item group ${isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
-                  }`}
+                className="group"
+                style={{
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                  gap: '0.75rem',
+                  padding: '0.5rem 0.75rem',
+                  fontWeight: '500',
+                  borderRadius: '0.5rem',
+                  fontSize: '0.875rem',
+                  backgroundColor: isActive(nav.path) ? '#4a5568' : 'transparent',
+                  color: isActive(nav.path) ? '#ffffff' : '#ffffff',
+                  textDecoration: 'none'
+                }}
               >
                 <span
-                  className={`menu-item-icon-size ${isActive(nav.path)
-                    ? "menu-item-icon-active"
-                    : "menu-item-icon-inactive"
-                    }`}
+                  style={{
+                    color: isActive(nav.path) ? '#ffffff' : '#ffffff'
+                  }}
                 >
                   {nav.icon}
                 </span>
                 {(isExpanded || isHovered || isMobileOpen) && (
-                  <span className="menu-item-text">{nav.name}</span>
+                  <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>{nav.name}</span>
                 )}
               </Link>
             )
@@ -243,29 +202,52 @@ const AppSidebar: React.FC = () => {
                   <li key={subItem.name}>
                     <Link
                       to={subItem.path}
-                      className={`menu-dropdown-item ${isActive(subItem.path)
-                        ? "menu-dropdown-item-active"
-                        : "menu-dropdown-item-inactive"
-                        }`}
+                      style={{
+                        position: 'relative',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        borderRadius: '0.5rem',
+                        padding: '0.625rem 0.75rem',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        backgroundColor: isActive(subItem.path) ? '#4a5568' : 'transparent',
+                        color: isActive(subItem.path) ? '#ffffff' : '#ffffff',
+                        textDecoration: 'none'
+                      }}
                     >
                       {subItem.name}
                       <span className="flex items-center gap-1 ml-auto">
                         {subItem.new && (
                           <span
-                            className={`ml-auto ${isActive(subItem.path)
-                              ? "menu-dropdown-badge-active"
-                              : "menu-dropdown-badge-inactive"
-                              } menu-dropdown-badge`}
+                            style={{
+                              display: 'block',
+                              borderRadius: '9999px',
+                              padding: '0.125rem 0.625rem',
+                              fontSize: '0.75rem',
+                              fontWeight: '500',
+                              textTransform: 'uppercase',
+                              color: '#465fff',
+                              backgroundColor: isActive(subItem.path) ? '#dde9ff' : '#ecf3ff',
+                              marginLeft: 'auto'
+                            }}
                           >
                             new
                           </span>
                         )}
                         {subItem.pro && (
                           <span
-                            className={`ml-auto ${isActive(subItem.path)
-                              ? "menu-dropdown-badge-active"
-                              : "menu-dropdown-badge-inactive"
-                              } menu-dropdown-badge`}
+                            style={{
+                              display: 'block',
+                              borderRadius: '9999px',
+                              padding: '0.125rem 0.625rem',
+                              fontSize: '0.75rem',
+                              fontWeight: '500',
+                              textTransform: 'uppercase',
+                              color: '#465fff',
+                              backgroundColor: isActive(subItem.path) ? '#dde9ff' : '#ecf3ff',
+                              marginLeft: 'auto'
+                            }}
                           >
                             pro
                           </span>
@@ -284,12 +266,12 @@ const AppSidebar: React.FC = () => {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/signin");
+    navigate("/");
   };
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 h-screen transition-all duration-300 ease-in-out z-50 border-r shadow-sm
         ${isExpanded || isMobileOpen
           ? "w-[290px]"
           : isHovered
@@ -298,6 +280,11 @@ const AppSidebar: React.FC = () => {
         }
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
+      style={{
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        borderColor: '#4a5568',
+        color: '#ffffff'
+      }}
       onMouseEnter={() => !isExpanded && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -310,22 +297,22 @@ const AppSidebar: React.FC = () => {
             <>
               <img
                 className="dark:hidden"
-                src="/images/logo/black_logo.png"
+                src="/images/logo/white_logo.png"
                 alt="Logo"
-                width={150}
-                height={20}
+                width={200}
+                height={50}
               />
               <img
                 className="hidden dark:block"
                 src="/images/logo/white_logo.png"
                 alt="Logo"
-                width={150}
-                height={20}
+                width={200}
+                height={50}
               />
             </>
           ) : (
             <img
-              src="/images/logo/logo.svg"
+              src="/images/logo/white_logo.png"
               alt="Logo"
               width={40}
               height={40}
@@ -337,44 +324,39 @@ const AppSidebar: React.FC = () => {
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
             <div>
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded && !isHovered
-                  ? "lg:justify-center"
-                  : "justify-start"
-                  }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Menu"
-                ) : (
-                  <HorizontaLDots className="size-6" />
-                )}
-              </h2>
               {renderMenuItems(navItems, "main")}
             </div>
             <div className="">
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded && !isHovered
-                  ? "lg:justify-center"
-                  : "justify-start"
-                  }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
-                ) : (
-                  <HorizontaLDots />
-                )}
-              </h2>
               {renderMenuItems(othersItems, "others")}
             </div>
           </div>
         </nav>
-        <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-800">
+        <div className="mt-auto pt-4 border-t" style={{ borderColor: '#4a5568' }}>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              gap: "0.75rem",
+              padding: "0.75rem",
+              borderRadius: "0.5rem",
+              fontWeight: 500,
+              fontSize: "0.875rem",
+              color: "#ffffff",
+              backgroundColor: "transparent",
+              border: "none",
+              cursor: "pointer",
+            }}
           >
-            <LogOut className="w-5 h-5" />
-            {(isExpanded || isHovered || isMobileOpen) && <span>Sign out</span>}
+            <span>
+              <LogOut />
+            </span>
+            {(isExpanded || isHovered || isMobileOpen) && (
+              <span style={{ fontSize: "0.875rem", fontWeight: 500 }}>
+                Sign out
+              </span>
+            )}
           </button>
         </div>
       </div>

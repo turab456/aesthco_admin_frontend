@@ -1,9 +1,8 @@
 import React from "react";
 import { Modal } from "../../../components/ui/modal";
 import Label from "../../../components/form/Label";
-import Input from "../../../components/form/input/InputField";
-import Button from "../../../components/ui/button/Button";
 import FileInput from "../../../components/form/input/FileInput";
+import { CustomButton, CustomInput } from "../../../components/custom";
 
 export type ProductFormState = {
   name: string;
@@ -80,8 +79,8 @@ const AddProductModal: React.FC<Props> = ({
           <div className="px-2 overflow-y-auto custom-scrollbar">
             <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
               <div>
-                <Label>Name *</Label>
-                <Input
+                <CustomInput
+                  label="Name *"
                   type="text"
                   placeholder="Enter product name"
                   value={form.name}
@@ -90,8 +89,8 @@ const AddProductModal: React.FC<Props> = ({
                 />
               </div>
               <div>
-                <Label>Slug *</Label>
-                <Input
+                <CustomInput
+                  label="Slug *"
                   type="text"
                   placeholder="product-name-url"
                   value={form.slug}
@@ -100,8 +99,8 @@ const AddProductModal: React.FC<Props> = ({
                 />
               </div>
               <div className="lg:col-span-2">
-                <Label>Short Description *</Label>
-                <Input
+                <CustomInput
+                  label="Short Description *"
                   type="text"
                   placeholder="One or two sentences about the product"
                   value={form.short_description}
@@ -229,63 +228,63 @@ const AddProductModal: React.FC<Props> = ({
                   </div>
 
                   <div>
-                    <Label>SKU *</Label>
-                    <Input
+                    <CustomInput
+                      label="SKU *"
                       type="text"
                       placeholder="SKU"
                       value={v.sku}
-                    onChange={(e) => {
-                      const updated = [...variants];
-                      updated[i].sku = e.target.value;
-                      setVariants(updated);
-                    }}
-                    disabled={isReadOnly}
-                  />
+                      onChange={(e) => {
+                        const updated = [...variants];
+                        updated[i].sku = e.target.value;
+                        setVariants(updated);
+                      }}
+                      disabled={isReadOnly}
+                    />
                   </div>
 
                   <div>
-                    <Label>Stock Quantity *</Label>
-                    <Input
+                    <CustomInput
+                      label="Stock Quantity *"
                       type="number"
                       placeholder="Stock"
                       value={v.stock}
-                    onChange={(e) => {
-                      const updated = [...variants];
-                      updated[i].stock = e.target.value;
-                      setVariants(updated);
-                    }}
-                    disabled={isReadOnly}
-                  />
+                      onChange={(e) => {
+                        const updated = [...variants];
+                        updated[i].stock = e.target.value;
+                        setVariants(updated);
+                      }}
+                      disabled={isReadOnly}
+                    />
                   </div>
 
                   <div>
-                    <Label>Base Price *</Label>
-                    <Input
+                    <CustomInput
+                      label="Base Price *"
                       type="number"
                       placeholder="Base price"
                       value={v.base_price}
-                    onChange={(e) => {
-                      const updated = [...variants];
-                      updated[i].base_price = e.target.value;
-                      setVariants(updated);
-                    }}
-                    disabled={isReadOnly}
-                  />
+                      onChange={(e) => {
+                        const updated = [...variants];
+                        updated[i].base_price = e.target.value;
+                        setVariants(updated);
+                      }}
+                      disabled={isReadOnly}
+                    />
                   </div>
 
                   <div>
-                    <Label>Sale Price</Label>
-                    <Input
+                    <CustomInput
+                      label="Sale Price"
                       type="number"
                       placeholder="Sale price"
                       value={v.sale_price}
-                    onChange={(e) => {
-                      const updated = [...variants];
-                      updated[i].sale_price = e.target.value;
-                      setVariants(updated);
-                    }}
-                    disabled={isReadOnly}
-                  />
+                      onChange={(e) => {
+                        const updated = [...variants];
+                        updated[i].sale_price = e.target.value;
+                        setVariants(updated);
+                      }}
+                      disabled={isReadOnly}
+                    />
                   </div>
 
                   <div>
@@ -308,16 +307,20 @@ const AddProductModal: React.FC<Props> = ({
 
                   <div className="flex items-center mt-6">
                     {variants.length > 1 && !isReadOnly && (
-                      <Button
-                        size="sm"
-                        type={"button"}
-                        variant="outline"
+                      <CustomButton
+                        fullWidth={false}
+                        type="button"
                         onClick={() =>
                           setVariants(variants.filter((_, index) => index !== i))
                         }
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "#111827",
+                          border: "1px solid #d1d5db",
+                        }}
                       >
                         Remove
-                      </Button>
+                      </CustomButton>
                     )}
                   </div>
                 </React.Fragment>
@@ -325,9 +328,9 @@ const AddProductModal: React.FC<Props> = ({
 
               <div className="lg:col-span-2">
                 {!isReadOnly && (
-                  <Button
-                    size="sm"
-                    type={"button"}
+                  <CustomButton
+                    fullWidth={false}
+                    type="button"
                     onClick={() =>
                       setVariants([
                         ...variants,
@@ -344,7 +347,7 @@ const AddProductModal: React.FC<Props> = ({
                     }
                   >
                     + Add Variant
-                  </Button>
+                  </CustomButton>
                 )}
               </div>
 
@@ -355,33 +358,33 @@ const AddProductModal: React.FC<Props> = ({
               {images.map((img, i) => (
                 <React.Fragment key={i}>
                   <div className="lg:col-span-2">
-                    <Label>Image URL *</Label>
-                    <Input
+                    <CustomInput
+                      label="Image URL *"
                       type="text"
                       placeholder="Image URL"
                       value={img.image_url}
-                    onChange={(e) => {
-                      const updated = [...images];
-                      updated[i].image_url = e.target.value;
-                      setImages(updated);
-                    }}
-                    disabled={isReadOnly}
-                  />
+                      onChange={(e) => {
+                        const updated = [...images];
+                        updated[i].image_url = e.target.value;
+                        setImages(updated);
+                      }}
+                      disabled={isReadOnly}
+                    />
                   </div>
 
                   <div className="lg:col-span-2">
-                    <Label>Alt Text</Label>
-                    <Input
+                    <CustomInput
+                      label="Alt Text"
                       type="text"
                       placeholder="Optional alt text"
                       value={img.alt_text}
-                    onChange={(e) => {
-                      const updated = [...images];
-                      updated[i].alt_text = e.target.value;
-                      setImages(updated);
-                    }}
-                    disabled={isReadOnly}
-                  />
+                      onChange={(e) => {
+                        const updated = [...images];
+                        updated[i].alt_text = e.target.value;
+                        setImages(updated);
+                      }}
+                      disabled={isReadOnly}
+                    />
                   </div>
 
                   <div>
@@ -418,16 +421,20 @@ const AddProductModal: React.FC<Props> = ({
 
                   <div className="flex items-center mt-6">
                     {images.length > 1 && !isReadOnly && (
-                      <Button
-                        type={"button"}
-                        size="sm"
-                        variant="outline"
+                      <CustomButton
+                        fullWidth={false}
+                        type="button"
                         onClick={() =>
                           setImages(images.filter((_, index) => index !== i))
                         }
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "#111827",
+                          border: "1px solid #d1d5db",
+                        }}
                       >
                         Remove
-                      </Button>
+                      </CustomButton>
                     )}
                   </div>
                 </React.Fragment>
@@ -435,9 +442,9 @@ const AddProductModal: React.FC<Props> = ({
 
               <div className="lg:col-span-2">
                 {!isReadOnly && (
-                  <Button
-                    size="sm"
-                    type={"button"}
+                  <CustomButton
+                    fullWidth={false}
+                    type="button"
                     onClick={() =>
                       setImages([
                         ...images,
@@ -451,20 +458,28 @@ const AddProductModal: React.FC<Props> = ({
                     }
                   >
                     + Add Image
-                  </Button>
+                  </CustomButton>
                 )}
               </div>
             </div>
           </div>
 
           <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-            <Button size="sm" variant="outline" onClick={onClose}>
+            <CustomButton
+              fullWidth={false}
+              onClick={onClose}
+              style={{
+                backgroundColor: "transparent",
+                color: "#111827",
+                border: "1px solid #d1d5db",
+              }}
+            >
               Close
-            </Button>
+            </CustomButton>
             {mode !== "view" && (
-              <Button size="sm" onClick={onSave}>
+              <CustomButton fullWidth={false} onClick={onSave}>
                 Save Changes
-              </Button>
+              </CustomButton>
             )}
           </div>
         </form>
