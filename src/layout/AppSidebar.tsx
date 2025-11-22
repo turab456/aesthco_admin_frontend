@@ -2,11 +2,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 
 import {
- 
   ChevronDown,
   Grid3X3,
   LogOut,
- 
+  LayoutDashboard,
 } from "lucide-react";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
@@ -21,15 +20,20 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
+    icon: <LayoutDashboard />,
+    name: "Dashboard",
+    path: "/dashboard",
+  },
+  {
     icon: <Grid3X3 />,
-    name: "Clothing Management",
-    subItems: [{ name: "Category Management", path: "/dashboard", pro: false },
-    { name: "Collections Management", path: "/dashboard/collections", pro: false },
-    { name: "Product Management", path: "/dashboard/products", pro: false },
-    { name: "Variants Management", path: "/dashboard/variants", pro: false },
+    name: "Cloth Management",
+    subItems: [
+      { name: "Products", path: "/dashboard/products", pro: false },
+      { name: "Collections", path: "/dashboard/collections", pro: false },
+      { name: "Categories", path: "/dashboard/categories", pro: false },
+      { name: "Variants", path: "/dashboard/variants", pro: false },
     ],
   },
- 
 ];
 
 const othersItems: NavItem[] = [

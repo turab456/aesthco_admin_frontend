@@ -1,65 +1,85 @@
 import React from "react";
-import { Eye, Pencil } from "lucide-react";
-import { DataTable, ColumnDef } from "../../../components/custom/CustomTable/CustomTable";
-import Button from "../../../components/ui/button/Button";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import {
+  DataTable,
+  ColumnDef,
+} from "../../../components/custom/CustomTable/CustomTable";
+import { ProductResponse } from "../api/ProductsApi";
 
 type Props = {
-  data: any[];
-  onView: (item: any) => void;
-  onEdit: (item: any) => void;
+  data: ProductResponse[];
+  onView: (product: ProductResponse) => void;
+  onEdit: (product: ProductResponse) => void;
+  onDelete?: (product: ProductResponse) => void;
   customAction?: React.ReactNode;
 };
 
-const ProductList: React.FC<Props> = ({ data, onView, onEdit, customAction }) => {
-  const columns: Array<ColumnDef<any>> = [
+const ProductList: React.FC<Props> = ({
+  data,
+  onView,
+  onEdit,
+  onDelete,
+  customAction,
+}) => {
+  const columns: Array<ColumnDef<ProductResponse>> = [
     {
       key: "productName",
-      header: "Product Name",
-      render: (row) => row.product.name,
+      header: "Product",
       searchable: true,
+      render: (row) => (
+        <div className="flex flex-col">
+          <span className="font-semibold text-gray-900 dark:text-white">
+            {row.name}
+          </span>
+          <span className="text-xs text-gray-500">Slug: {row.slug}</span>
+        </div>
+      ),
     },
     {
       key: "category",
       header: "Category",
-      render: (row) => row.product.category_id,
       searchable: true,
+      render: (row) => row.category?.name ?? "—",
     },
     {
       key: "collection",
       header: "Collection",
-      render: (row) => row.product.collection_id || "—",
       searchable: true,
+      render: (row) => row.collection?.name ?? "—",
     },
     {
-      key: "shortDescription",
-      header: "Short Description",
-      render: (row) => row.product.short_description,
+      key: "status",
+      header: "Status",
       searchable: true,
+      render: (row) =>
+        row.isActive ? (
+          <span className="text-green-600">Active</span>
+        ) : (
+          <span className="text-red-500">Inactive</span>
+        ),
     },
     {
       key: "actions",
       header: "Actions",
+      searchable: false,
       render: (row) => (
         <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
+          <Eye
+            className="h-4 w-4 cursor-pointer hover:text-blue-600"
             onClick={() => onView(row)}
-            className="flex items-center gap-1"
-          >
-            <Eye className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
+          />
+          <Pencil
+            className="h-4 w-4 cursor-pointer hover:text-green-600"
             onClick={() => onEdit(row)}
-            className="flex items-center gap-1"
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
+          />
+          {onDelete && (
+            <Trash2
+              className="h-4 w-4 cursor-pointer hover:text-red-600"
+              onClick={() => onDelete(row)}
+            />
+          )}
         </div>
       ),
-      searchable: false,
     },
   ];
 
@@ -69,7 +89,9 @@ const ProductList: React.FC<Props> = ({ data, onView, onEdit, customAction }) =>
       columns={columns}
       defaultPageSize={10}
       enableSearchDropdown
-      buildSuggestionLabel={(row) => `${row.product.name} — ${row.product.category_id || ""}`}
+      buildSuggestionLabel={(row) =>
+        `${row.name} – ${row.category?.name ?? "Uncategorised"}`
+      }
       onSuggestionSelect={(row) => onView(row)}
       actionComponent={customAction}
     />

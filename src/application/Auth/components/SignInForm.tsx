@@ -16,7 +16,7 @@ export default function SignInForm() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/app/products", { replace: true });
+      navigate("/dashboard", { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
@@ -26,7 +26,7 @@ export default function SignInForm() {
     setError(null);
     try {
       await signIn({ email, password });
-      navigate("/app/products");
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       setError((err as Error).message);
     } finally {
