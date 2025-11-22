@@ -5,9 +5,10 @@ import AppLayout from "../layout/AppLayout";
 import ProductMangement from "../application/Products";
 import PrivateRoute from "../components/auth/PrivateRoute";
 import Dashboard from "../application/Dashboard";
-import CollectionsManagement from "../application/Collections";
 import CategoryManagement from "../application/category";
-import VariantsManagement from "../application/Variants";
+import CollectionManagement from "../application/Collections";
+import ColorsManagement from "../application/Colors";
+import SizeManagement from "../application/Sizes";
 
 const AppRoutes = () => {
   return (
@@ -19,9 +20,10 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<AppLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="products" element={<ProductMangement />} />
-          <Route path="collections" element={<CollectionsManagement />} />
-          <Route path="categories" element={<CategoryManagement />} />
-          <Route path="variants" element={<VariantsManagement />} />
+          <Route path="category" element={<CategoryManagement />} />
+          <Route path="collection" element={<CollectionManagement />} />
+          <Route path="colors" element={<ColorsManagement />} />
+          <Route path="size" element={<SizeManagement />} />
         </Route>
         <Route
           path="/cloth-management/*"

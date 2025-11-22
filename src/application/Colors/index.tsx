@@ -1,54 +1,45 @@
-import  { useState } from 'react'
+import React, { useState } from 'react'
 import Button from '../../components/ui/button/Button'
+import ProductList from '../Products/components/ProductList'
 import PageMeta from '../../components/common/PageMeta'
 import PageBreadcrumb from '../../components/common/PageBreadCrumb'
+import { useModal } from '../../hooks/useModal'
 
 import axios from 'axios'
-import { CollectionsFormTypes } from './types'
-import { useModal } from '../../hooks/useModal'
-import CollectionList from './components/CollectionList'
-import AddCollectionModal from './components/AddCollectionModal'
+import { ColorFormTypes } from './types'
+import ColorsLists from './components/ColorsList'
+import AddColorsModal from './components/AddColorsModal'
 
-const generateSlug = (value: string) =>
-  value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
 
 
 
 const sampleTableData = [
     {
         id: 1,
-        categoryName: "Zip Hoodies",
-        slug: "zip-hoodies"
+        name: "Cafe",
+        code: "#122HH",
+        hexCode: "#122HH",
+       
     }
 ];
-const INITIAL_FORM: CollectionsFormTypes = {
-    collectionName: "",
-    slug: "",
+const INITIAL_FORM: ColorFormTypes = {
+    name: "",
+    code: "",
+    hexCode: "",
 };
 
 
-const CollectionManagement = () => {
-    const [form, setForm] = useState<CollectionsFormTypes>(INITIAL_FORM);
+const ColorsManagement = () => {
+    const [form, setForm] = useState<ColorFormTypes>(INITIAL_FORM);
     const { isOpen, openModal, closeModal } = useModal();
     const [modalMode, setModalMode] = useState<"create" | "view" | "edit">("create");
     const [, setSelectedItem] = useState<any | null>(null);
 
 
-const handleFormChange = (key: keyof CollectionsFormTypes, value: any) => {
-    if (key === "collectionName") {
-      setForm((prev) => ({
-        ...prev,
-        categoryName: value,
-        slug: generateSlug(value),
-      }));
-    } else {
+const handleFormChange = (key: keyof ColorFormTypes, value: any) => {
+   
       setForm((prev) => ({ ...prev, [key]: value }));
-    }
+    
   };
 
   const handleSave = async () => {
@@ -87,23 +78,23 @@ const handleFormChange = (key: keyof CollectionsFormTypes, value: any) => {
     };
     return (
         <>
-            <PageMeta title="Collection Management" description="Manage your categories" />
-            <PageBreadcrumb pageTitle="Collection Management" />
+            <PageMeta title="Colors Management" description="Manage your colors" />
+            <PageBreadcrumb pageTitle="Colors Management" />
 
             <div className="space-y-6">
-                <CollectionList
+                <ColorsLists
                     data={sampleTableData}
                     onView={handleOpenView}
                     onEdit={handleOpenEdit}
                     customAction={
                         <Button size="sm" onClick={handleOpenCreate}>
-                            Add Collections
+                            Add Colors
                         </Button>
                     }
                 />
             </div>
 
-            <AddCollectionModal
+            <AddColorsModal
         isOpen={isOpen}
         onClose={closeModal}
         mode={modalMode}
@@ -116,4 +107,4 @@ const handleFormChange = (key: keyof CollectionsFormTypes, value: any) => {
     )
 }
 
-export default CollectionManagement
+export default ColorsManagement

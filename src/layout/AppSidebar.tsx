@@ -2,14 +2,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 
 import {
-  ChevronDown,
-  Grid3X3,
-  LogOut,
   LayoutDashboard,
+  Blend,
+  ChevronDown,
+  LogOut,
+  ShirtIcon,
 } from "lucide-react";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
-
 
 type NavItem = {
   name: string;
@@ -25,19 +25,25 @@ const navItems: NavItem[] = [
     path: "/dashboard",
   },
   {
-    icon: <Grid3X3 />,
-    name: "Cloth Management",
+    icon: <ShirtIcon />,
+    name: "Clothing Management",
     subItems: [
-      { name: "Products", path: "/dashboard/products", pro: false },
-      { name: "Collections", path: "/dashboard/collections", pro: false },
-      { name: "Categories", path: "/dashboard/categories", pro: false },
-      { name: "Variants", path: "/dashboard/variants", pro: false },
+      { name: "Category Management", path: "/dashboard/category", pro: false },
+      { name: "Collections Management", path: "/dashboard/collection", pro: false },
+      { name: "Product Management", path: "/dashboard/products", pro: false },
     ],
   },
 ];
 
 const othersItems: NavItem[] = [
-  
+  {
+    icon: <Blend />,
+    name: "Variant Management",
+    subItems: [
+      { name: "Colors", path: "/dashboard/colors", pro: false },
+      { name: "Size", path: "/dashboard/size", pro: false },
+    ],
+  },
 ];
 
 const AppSidebar: React.FC = () => {
@@ -117,41 +123,55 @@ const AppSidebar: React.FC = () => {
           {nav.subItems ? (
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
-              className={`group cursor-pointer ${!isExpanded && !isHovered
+              className={`group cursor-pointer ${
+                !isExpanded && !isHovered
                   ? "lg:justify-center"
                   : "lg:justify-start"
-                }`}
+              }`}
               style={{
-                position: 'relative',
-                display: 'flex',
-                alignItems: 'center',
-                width: '100%',
-                gap: '0.75rem',
-                padding: '0.5rem 0.75rem',
-                fontWeight: '500',
-                borderRadius: '0.5rem',
-                fontSize: '0.875rem',
-                backgroundColor: openSubmenu?.type === menuType && openSubmenu?.index === index ? '#4a5568' : 'transparent',
-                color: openSubmenu?.type === menuType && openSubmenu?.index === index ? '#ffffff' : '#ffffff'
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                gap: "0.75rem",
+                padding: "0.5rem 0.75rem",
+                fontWeight: "500",
+                borderRadius: "0.5rem",
+                fontSize: "0.875rem",
+                backgroundColor:
+                  openSubmenu?.type === menuType && openSubmenu?.index === index
+                    ? "#4a5568"
+                    : "transparent",
+                color:
+                  openSubmenu?.type === menuType && openSubmenu?.index === index
+                    ? "#ffffff"
+                    : "#ffffff",
               }}
             >
               <span
                 style={{
-                  color: openSubmenu?.type === menuType && openSubmenu?.index === index ? '#ffffff' : '#ffffff'
+                  color:
+                    openSubmenu?.type === menuType &&
+                    openSubmenu?.index === index
+                      ? "#ffffff"
+                      : "#ffffff",
                 }}
               >
                 {nav.icon}
               </span>
               {(isExpanded || isHovered || isMobileOpen) && (
-                <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>{nav.name}</span>
+                <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>
+                  {nav.name}
+                </span>
               )}
               {(isExpanded || isHovered || isMobileOpen) && (
                 <ChevronDown
-                  className={`ml-auto w-5 h-5 transition-transform duration-200 ${openSubmenu?.type === menuType &&
+                  className={`ml-auto w-5 h-5 transition-transform duration-200 ${
+                    openSubmenu?.type === menuType &&
                     openSubmenu?.index === index
-                    ? "rotate-180 text-brand-500"
-                    : ""
-                    }`}
+                      ? "rotate-180 text-brand-500"
+                      : ""
+                  }`}
                 />
               )}
             </button>
@@ -161,29 +181,33 @@ const AppSidebar: React.FC = () => {
                 to={nav.path}
                 className="group"
                 style={{
-                  position: 'relative',
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '100%',
-                  gap: '0.75rem',
-                  padding: '0.5rem 0.75rem',
-                  fontWeight: '500',
-                  borderRadius: '0.5rem',
-                  fontSize: '0.875rem',
-                  backgroundColor: isActive(nav.path) ? '#4a5568' : 'transparent',
-                  color: isActive(nav.path) ? '#ffffff' : '#ffffff',
-                  textDecoration: 'none'
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  width: "100%",
+                  gap: "0.75rem",
+                  padding: "0.5rem 0.75rem",
+                  fontWeight: "500",
+                  borderRadius: "0.5rem",
+                  fontSize: "0.875rem",
+                  backgroundColor: isActive(nav.path)
+                    ? "#4a5568"
+                    : "transparent",
+                  color: isActive(nav.path) ? "#ffffff" : "#ffffff",
+                  textDecoration: "none",
                 }}
               >
                 <span
                   style={{
-                    color: isActive(nav.path) ? '#ffffff' : '#ffffff'
+                    color: isActive(nav.path) ? "#ffffff" : "#ffffff",
                   }}
                 >
                   {nav.icon}
                 </span>
                 {(isExpanded || isHovered || isMobileOpen) && (
-                  <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>{nav.name}</span>
+                  <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>
+                    {nav.name}
+                  </span>
                 )}
               </Link>
             )
@@ -207,17 +231,19 @@ const AppSidebar: React.FC = () => {
                     <Link
                       to={subItem.path}
                       style={{
-                        position: 'relative',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.75rem',
-                        borderRadius: '0.5rem',
-                        padding: '0.625rem 0.75rem',
-                        fontSize: '0.875rem',
-                        fontWeight: '500',
-                        backgroundColor: isActive(subItem.path) ? '#4a5568' : 'transparent',
-                        color: isActive(subItem.path) ? '#ffffff' : '#ffffff',
-                        textDecoration: 'none'
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.75rem",
+                        borderRadius: "0.5rem",
+                        padding: "0.625rem 0.75rem",
+                        fontSize: "0.875rem",
+                        fontWeight: "500",
+                        backgroundColor: isActive(subItem.path)
+                          ? "#4a5568"
+                          : "transparent",
+                        color: isActive(subItem.path) ? "#ffffff" : "#ffffff",
+                        textDecoration: "none",
                       }}
                     >
                       {subItem.name}
@@ -225,15 +251,17 @@ const AppSidebar: React.FC = () => {
                         {subItem.new && (
                           <span
                             style={{
-                              display: 'block',
-                              borderRadius: '9999px',
-                              padding: '0.125rem 0.625rem',
-                              fontSize: '0.75rem',
-                              fontWeight: '500',
-                              textTransform: 'uppercase',
-                              color: '#465fff',
-                              backgroundColor: isActive(subItem.path) ? '#dde9ff' : '#ecf3ff',
-                              marginLeft: 'auto'
+                              display: "block",
+                              borderRadius: "9999px",
+                              padding: "0.125rem 0.625rem",
+                              fontSize: "0.75rem",
+                              fontWeight: "500",
+                              textTransform: "uppercase",
+                              color: "#465fff",
+                              backgroundColor: isActive(subItem.path)
+                                ? "#dde9ff"
+                                : "#ecf3ff",
+                              marginLeft: "auto",
                             }}
                           >
                             new
@@ -242,15 +270,17 @@ const AppSidebar: React.FC = () => {
                         {subItem.pro && (
                           <span
                             style={{
-                              display: 'block',
-                              borderRadius: '9999px',
-                              padding: '0.125rem 0.625rem',
-                              fontSize: '0.75rem',
-                              fontWeight: '500',
-                              textTransform: 'uppercase',
-                              color: '#465fff',
-                              backgroundColor: isActive(subItem.path) ? '#dde9ff' : '#ecf3ff',
-                              marginLeft: 'auto'
+                              display: "block",
+                              borderRadius: "9999px",
+                              padding: "0.125rem 0.625rem",
+                              fontSize: "0.75rem",
+                              fontWeight: "500",
+                              textTransform: "uppercase",
+                              color: "#465fff",
+                              backgroundColor: isActive(subItem.path)
+                                ? "#dde9ff"
+                                : "#ecf3ff",
+                              marginLeft: "auto",
                             }}
                           >
                             pro
@@ -276,25 +306,27 @@ const AppSidebar: React.FC = () => {
   return (
     <aside
       className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 h-screen transition-all duration-300 ease-in-out z-50 border-r shadow-sm
-        ${isExpanded || isMobileOpen
-          ? "w-[290px]"
-          : isHovered
+        ${
+          isExpanded || isMobileOpen
+            ? "w-[290px]"
+            : isHovered
             ? "w-[290px]"
             : "w-[90px]"
         }
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
       style={{
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        borderColor: '#4a5568',
-        color: '#ffffff'
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        borderColor: "#4a5568",
+        color: "#ffffff",
       }}
       onMouseEnter={() => !isExpanded && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`py-8 flex ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
-          }`}
+        className={`py-8 flex ${
+          !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
+        }`}
       >
         <Link to="/">
           {isExpanded || isHovered || isMobileOpen ? (
@@ -327,15 +359,14 @@ const AppSidebar: React.FC = () => {
       <div className="flex flex-col flex-1 overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
-            <div>
-              {renderMenuItems(navItems, "main")}
-            </div>
-            <div className="">
-              {renderMenuItems(othersItems, "others")}
-            </div>
+            <div>{renderMenuItems(navItems, "main")}</div>
+            <div className="">{renderMenuItems(othersItems, "others")}</div>
           </div>
         </nav>
-        <div className="mt-auto pt-4 border-t" style={{ borderColor: '#4a5568' }}>
+        <div
+          className="mt-auto pt-4 border-t"
+          style={{ borderColor: "#4a5568" }}
+        >
           <button
             onClick={handleLogout}
             style={{

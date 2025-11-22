@@ -1,54 +1,43 @@
-import  { useState } from 'react'
+import React, { useState } from 'react'
 import Button from '../../components/ui/button/Button'
+import ProductList from '../Products/components/ProductList'
 import PageMeta from '../../components/common/PageMeta'
 import PageBreadcrumb from '../../components/common/PageBreadCrumb'
+import { useModal } from '../../hooks/useModal'
 
 import axios from 'axios'
-import { CollectionsFormTypes } from './types'
-import { useModal } from '../../hooks/useModal'
-import CollectionList from './components/CollectionList'
-import AddCollectionModal from './components/AddCollectionModal'
+import SizeLists from './components/SizeLists'
+import AddSizesModal from './components/AddSizesModal'
+import { SizeFormTypes } from './types'
 
-const generateSlug = (value: string) =>
-  value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
 
 
 
 const sampleTableData = [
     {
         id: 1,
-        categoryName: "Zip Hoodies",
-        slug: "zip-hoodies"
+        code: "M",
+        label: "Medium",
+       
     }
 ];
-const INITIAL_FORM: CollectionsFormTypes = {
-    collectionName: "",
-    slug: "",
+const INITIAL_FORM: SizeFormTypes = {
+    code: "",
+    label: "",
 };
 
 
-const CollectionManagement = () => {
-    const [form, setForm] = useState<CollectionsFormTypes>(INITIAL_FORM);
+const SizeManagement = () => {
+    const [form, setForm] = useState<SizeFormTypes>(INITIAL_FORM);
     const { isOpen, openModal, closeModal } = useModal();
     const [modalMode, setModalMode] = useState<"create" | "view" | "edit">("create");
     const [, setSelectedItem] = useState<any | null>(null);
 
 
-const handleFormChange = (key: keyof CollectionsFormTypes, value: any) => {
-    if (key === "collectionName") {
-      setForm((prev) => ({
-        ...prev,
-        categoryName: value,
-        slug: generateSlug(value),
-      }));
-    } else {
+const handleFormChange = (key: keyof SizeFormTypes, value: any) => {
+   
       setForm((prev) => ({ ...prev, [key]: value }));
-    }
+    
   };
 
   const handleSave = async () => {
@@ -87,23 +76,23 @@ const handleFormChange = (key: keyof CollectionsFormTypes, value: any) => {
     };
     return (
         <>
-            <PageMeta title="Collection Management" description="Manage your categories" />
-            <PageBreadcrumb pageTitle="Collection Management" />
+            <PageMeta title="Size Management" description="Manage your sizes" />
+            <PageBreadcrumb pageTitle="Size Management" />
 
             <div className="space-y-6">
-                <CollectionList
+                <SizeLists
                     data={sampleTableData}
                     onView={handleOpenView}
                     onEdit={handleOpenEdit}
                     customAction={
                         <Button size="sm" onClick={handleOpenCreate}>
-                            Add Collections
+                            Add Sizes
                         </Button>
                     }
                 />
             </div>
 
-            <AddCollectionModal
+            <AddSizesModal
         isOpen={isOpen}
         onClose={closeModal}
         mode={modalMode}
@@ -116,4 +105,4 @@ const handleFormChange = (key: keyof CollectionsFormTypes, value: any) => {
     )
 }
 
-export default CollectionManagement
+export default SizeManagement
