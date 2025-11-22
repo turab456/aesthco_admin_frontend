@@ -1,8 +1,8 @@
 import * as React from "react";
 import { cn } from "./cn";
-import CustomButton from "../CustomButton/CustomButton";
-import CustomInput from "../CustomInput/CustomInput";
-import { Download, ChevronLeft, ChevronRight } from "lucide-react";
+import CustomButton from "../CustomButton";
+import CustomInput from "../CustomInput";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export type Primitive =
   | string
@@ -222,26 +222,6 @@ export function DataTable<T extends Record<string, Primitive>>(props: DataTableP
     [jumpToRow, onSuggestionSelect]
   );
 
-  const onSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!enableSearchDropdown || !showSuggestions) return;
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((i) => Math.max(i - 1, 0));
-    } else if (e.key === "Enter") {
-      if (activeIndex >= 0 && activeIndex < suggestions.length) {
-        e.preventDefault();
-        const chosen = suggestions[activeIndex];
-        selectSuggestion({ row: chosen.row, idx: chosen.idx, label: chosen.label });
-      }
-    } else if (e.key === "Escape") {
-      setShowSuggestions(false);
-      setActiveIndex(-1);
-    }
-  };
 
   return (
     <div className={cn("rounded-lg border border-slate-200 bg-white shadow-md", className)} ref={containerRef}>
@@ -250,13 +230,9 @@ export function DataTable<T extends Record<string, Primitive>>(props: DataTableP
           <CustomInput
             label=""
             value={search}
-            onChange={(v: string) => {
-              setSearch(v);
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setSearch(e.target.value);
               if (enableSearchDropdown) setShowSuggestions(true);
-            }}
-            onKeyDown={onSearchKeyDown}
-            onFocus={() => {
-              if (enableSearchDropdown && search.trim()) setShowSuggestions(true);
             }}
             placeholder="Search..."
             className="mb-0"
@@ -287,10 +263,7 @@ export function DataTable<T extends Record<string, Primitive>>(props: DataTableP
           {filterControls}
           {actionComponent}
           <CustomButton
-            variant=""
-            size="sm"
             onClick={exportCurrentView}
-            startIcon={<Download size={16} />}
           >
             Export
           </CustomButton>

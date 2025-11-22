@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 
 // Assume these icons are imported from an icon library
 import {
@@ -16,6 +17,7 @@ import {
   UserCircleIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
+import { useAuth } from "../context/AuthContext";
 import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
@@ -99,6 +101,8 @@ const othersItems: NavItem[] = [
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";
@@ -278,6 +282,11 @@ const AppSidebar: React.FC = () => {
     </ul>
   );
 
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/signin");
+  };
+
   return (
     <aside
       className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
@@ -324,7 +333,7 @@ const AppSidebar: React.FC = () => {
           )}
         </Link>
       </div>
-      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+      <div className="flex flex-col flex-1 overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
             <div>
@@ -359,7 +368,15 @@ const AppSidebar: React.FC = () => {
             </div>
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? "" : null}
+        <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-800">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800"
+          >
+            <LogOut className="w-5 h-5" />
+            {(isExpanded || isHovered || isMobileOpen) && <span>Sign out</span>}
+          </button>
+        </div>
       </div>
     </aside>
   );
