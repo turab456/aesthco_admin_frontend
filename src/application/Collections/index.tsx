@@ -1,5 +1,5 @@
 import  { useState } from 'react'
-import Button from '../../components/ui/button/Button'
+import { CustomButton } from '../../components/custom'
 import PageMeta from '../../components/common/PageMeta'
 import PageBreadcrumb from '../../components/common/PageBreadCrumb'
 
@@ -96,9 +96,9 @@ const handleFormChange = (key: keyof CollectionsFormTypes, value: any) => {
                     onView={handleOpenView}
                     onEdit={handleOpenEdit}
                     customAction={
-                        <Button size="sm" onClick={handleOpenCreate}>
-                            Add Collections
-                        </Button>
+                        <CustomButton size="sm" onClick={handleOpenCreate}>
+                            Add Collection
+                        </CustomButton>
                     }
                 />
             </div>

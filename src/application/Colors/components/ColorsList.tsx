@@ -1,60 +1,91 @@
 import React from "react";
-import { Eye, Pencil } from "lucide-react";
-import { DataTable, ColumnDef } from "../../../components/custom/CustomTable/CustomTable";
-import Button from "../../../components/ui/button/Button";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import {
+  DataTable,
+  ColumnDef,
+} from "../../../components/custom/CustomTable/CustomTable";
+
+type ColorResponse = {
+  id: number;
+  name: string;
+  code: string;
+  hexCode: string;
+};
 
 type Props = {
-  data: any[];
-  onView: (item: any) => void;
-  onEdit: (item: any) => void;
+  data: ColorResponse[];
+  onView: (color: ColorResponse) => void;
+  onEdit: (color: ColorResponse) => void;
+  onDelete?: (color: ColorResponse) => void;
   customAction?: React.ReactNode;
 };
 
-const ColorsLists: React.FC<Props> = ({ data, onView, onEdit, customAction }) => {
-  const columns: Array<ColumnDef<any>> = [
+const ColorsLists: React.FC<Props> = ({
+  data,
+  onView,
+  onEdit,
+  onDelete,
+  customAction,
+}) => {
+  const columns: Array<ColumnDef<ColorResponse>> = [
     {
       key: "name",
       header: "Color Name",
-      render: (row) => row.name,
       searchable: true,
+      render: (row) => (
+        <span className="font-semibold text-gray-900 dark:text-white">
+          {row.name}
+        </span>
+      ),
     },
     {
       key: "code",
       header: "Color Code",
-      render: (row) => row.code,
       searchable: true,
+      render: (row) => (
+        <span className="text-gray-600 dark:text-gray-400">
+          {row.code}
+        </span>
+      ),
     },
     {
       key: "hexCode",
-      header: "Color HexCode",
-      render: (row) => row.hexCode,
+      header: "Hex Code",
       searchable: true,
-    },
-   
-   {
-      key: "actions",
-      header: "Actions",
       render: (row) => (
         <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => onView(row)}
-            className="flex items-center gap-1"
-          >
-            <Eye className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => onEdit(row)}
-            className="flex items-center gap-1"
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
+          <div
+            className="w-4 h-4 rounded border border-gray-300"
+            style={{ backgroundColor: row.hexCode }}
+          />
+          <span className="text-gray-600 dark:text-gray-400">
+            {row.hexCode}
+          </span>
         </div>
       ),
+    },
+    {
+      key: "actions",
+      header: "Actions",
       searchable: false,
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <Eye
+            className="h-4 w-4 cursor-pointer hover:text-blue-600"
+            onClick={() => onView(row)}
+          />
+          <Pencil
+            className="h-4 w-4 cursor-pointer hover:text-green-600"
+            onClick={() => onEdit(row)}
+          />
+          {onDelete && (
+            <Trash2
+              className="h-4 w-4 cursor-pointer hover:text-red-600"
+              onClick={() => onDelete(row)}
+            />
+          )}
+        </div>
+      ),
     },
   ];
 
@@ -64,7 +95,9 @@ const ColorsLists: React.FC<Props> = ({ data, onView, onEdit, customAction }) =>
       columns={columns}
       defaultPageSize={10}
       enableSearchDropdown
-      buildSuggestionLabel={(row) => `${row.name} — ${row.code || ""}`}
+      buildSuggestionLabel={(row) =>
+        `${row.name} – ${row.code || ""}`
+      }
       onSuggestionSelect={(row) => onView(row)}
       actionComponent={customAction}
     />

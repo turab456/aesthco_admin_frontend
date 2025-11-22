@@ -1,56 +1,75 @@
 import React from "react";
-import { Eye, Pencil } from "lucide-react";
-import { DataTable, ColumnDef } from "../../../components/custom/CustomTable/CustomTable";
-import Button from "../../../components/ui/button/Button";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import {
+  DataTable,
+  ColumnDef,
+} from "../../../components/custom/CustomTable/CustomTable";
+
+type CategoryResponse = {
+  id: number;
+  categoryName: string;
+  slug: string;
+};
 
 type Props = {
-  data: any[];
-  onView: (item: any) => void;
-  onEdit: (item: any) => void;
+  data: CategoryResponse[];
+  onView: (category: CategoryResponse) => void;
+  onEdit: (category: CategoryResponse) => void;
+  onDelete?: (category: CategoryResponse) => void;
   customAction?: React.ReactNode;
 };
 
-const CategoryList: React.FC<Props> = ({ data, onView, onEdit, customAction }) => {
-  const columns: Array<ColumnDef<any>> = [
+const CategoryList: React.FC<Props> = ({
+  data,
+  onView,
+  onEdit,
+  onDelete,
+  customAction,
+}) => {
+  const columns: Array<ColumnDef<CategoryResponse>> = [
     {
       key: "categoryName",
       header: "Category Name",
-      render: (row) => row.categoryName,
       searchable: true,
+      render: (row) => (
+        <span className="font-semibold text-gray-900 dark:text-white">
+          {row.categoryName}
+        </span>
+      ),
     },
     {
       key: "slug",
       header: "Slug",
-      render: (row) => row.slug,
       searchable: true,
+      render: (row) => (
+        <span className="text-gray-600 dark:text-gray-400">
+          {row.slug}
+        </span>
+      ),
     },
     {
       key: "actions",
       header: "Actions",
+      searchable: false,
       render: (row) => (
         <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
+          <Eye
+            className="h-4 w-4 cursor-pointer hover:text-blue-600"
             onClick={() => onView(row)}
-            className="flex items-center gap-1"
-          >
-            <Eye className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
+          />
+          <Pencil
+            className="h-4 w-4 cursor-pointer hover:text-green-600"
             onClick={() => onEdit(row)}
-            className="flex items-center gap-1"
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
+          />
+          {onDelete && (
+            <Trash2
+              className="h-4 w-4 cursor-pointer hover:text-red-600"
+              onClick={() => onDelete(row)}
+            />
+          )}
         </div>
       ),
-      searchable: false,
     },
-
-
   ];
 
   return (
@@ -59,7 +78,9 @@ const CategoryList: React.FC<Props> = ({ data, onView, onEdit, customAction }) =
       columns={columns}
       defaultPageSize={10}
       enableSearchDropdown
-      buildSuggestionLabel={(row) => `${row.categoryName} — ${row.slug || ""}`}
+      buildSuggestionLabel={(row) =>
+        `${row.categoryName} – ${row.slug || "Uncategorised"}`
+      }
       onSuggestionSelect={(row) => onView(row)}
       actionComponent={customAction}
     />

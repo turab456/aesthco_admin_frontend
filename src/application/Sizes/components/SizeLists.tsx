@@ -1,56 +1,75 @@
 import React from "react";
-import { Eye, Pencil } from "lucide-react";
-import { DataTable, ColumnDef } from "../../../components/custom/CustomTable/CustomTable";
-import Button from "../../../components/ui/button/Button";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import {
+  DataTable,
+  ColumnDef,
+} from "../../../components/custom/CustomTable/CustomTable";
+
+type SizeResponse = {
+  id: number;
+  label: string;
+  code: string;
+};
 
 type Props = {
-  data: any[];
-  onView: (item: any) => void;
-  onEdit: (item: any) => void;
+  data: SizeResponse[];
+  onView: (size: SizeResponse) => void;
+  onEdit: (size: SizeResponse) => void;
+  onDelete?: (size: SizeResponse) => void;
   customAction?: React.ReactNode;
 };
 
-const SizeLists: React.FC<Props> = ({ data, onView, onEdit, customAction }) => {
-  const columns: Array<ColumnDef<any>> = [
+const SizeLists: React.FC<Props> = ({
+  data,
+  onView,
+  onEdit,
+  onDelete,
+  customAction,
+}) => {
+  const columns: Array<ColumnDef<SizeResponse>> = [
     {
       key: "label",
       header: "Label",
-      render: (row) => row.label,
       searchable: true,
+      render: (row) => (
+        <span className="font-semibold text-gray-900 dark:text-white">
+          {row.label}
+        </span>
+      ),
     },
     {
       key: "code",
       header: "Size Code",
-      render: (row) => row.code,
       searchable: true,
+      render: (row) => (
+        <span className="text-gray-600 dark:text-gray-400">
+          {row.code}
+        </span>
+      ),
     },
-   
     {
       key: "actions",
       header: "Actions",
+      searchable: false,
       render: (row) => (
         <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
+          <Eye
+            className="h-4 w-4 cursor-pointer hover:text-blue-600"
             onClick={() => onView(row)}
-            className="flex items-center gap-1"
-          >
-            <Eye className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
+          />
+          <Pencil
+            className="h-4 w-4 cursor-pointer hover:text-green-600"
             onClick={() => onEdit(row)}
-            className="flex items-center gap-1"
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
+          />
+          {onDelete && (
+            <Trash2
+              className="h-4 w-4 cursor-pointer hover:text-red-600"
+              onClick={() => onDelete(row)}
+            />
+          )}
         </div>
       ),
-      searchable: false,
     },
-  
   ];
 
   return (
@@ -59,7 +78,9 @@ const SizeLists: React.FC<Props> = ({ data, onView, onEdit, customAction }) => {
       columns={columns}
       defaultPageSize={10}
       enableSearchDropdown
-      buildSuggestionLabel={(row) => `${row.code} — ${row.label || ""}`}
+      buildSuggestionLabel={(row) =>
+        `${row.code} – ${row.label || ""}`
+      }
       onSuggestionSelect={(row) => onView(row)}
       actionComponent={customAction}
     />

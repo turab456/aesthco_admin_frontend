@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import Button from '../../components/ui/button/Button'
-import ProductList from '../Products/components/ProductList'
+import { CustomButton } from '../../components/custom'
 import PageMeta from '../../components/common/PageMeta'
 import PageBreadcrumb from '../../components/common/PageBreadCrumb'
 import { useModal } from '../../hooks/useModal'
@@ -87,9 +86,9 @@ const handleFormChange = (key: keyof ColorFormTypes, value: any) => {
                     onView={handleOpenView}
                     onEdit={handleOpenEdit}
                     customAction={
-                        <Button size="sm" onClick={handleOpenCreate}>
-                            Add Colors
-                        </Button>
+                        <CustomButton size="sm" onClick={handleOpenCreate}>
+                            Add Color
+                        </CustomButton>
                     }
                 />
             </div>

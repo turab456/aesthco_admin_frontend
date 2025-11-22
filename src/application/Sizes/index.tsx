@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import Button from '../../components/ui/button/Button'
-import ProductList from '../Products/components/ProductList'
+import { CustomButton } from '../../components/custom'
 import PageMeta from '../../components/common/PageMeta'
 import PageBreadcrumb from '../../components/common/PageBreadCrumb'
 import { useModal } from '../../hooks/useModal'
@@ -85,9 +84,9 @@ const handleFormChange = (key: keyof SizeFormTypes, value: any) => {
                     onView={handleOpenView}
                     onEdit={handleOpenEdit}
                     customAction={
-                        <Button size="sm" onClick={handleOpenCreate}>
-                            Add Sizes
-                        </Button>
+                        <CustomButton size="sm" onClick={handleOpenCreate}>
+                            Add Size
+                        </CustomButton>
                     }
                 />
             </div>
