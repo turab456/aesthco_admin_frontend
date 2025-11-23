@@ -23,6 +23,7 @@ export type VariantState = {
   base_price: string;
   sale_price: string;
   is_available: string;
+  show_in_listing?: string;
 };
 
 export type ImageState = {

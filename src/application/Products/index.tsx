@@ -49,6 +49,7 @@ const INITIAL_VARIANT: VariantState = {
   base_price: "",
   sale_price: "",
   is_available: "true",
+  show_in_listing: "true",
 };
 
 const INITIAL_IMAGE: ImageState = {
@@ -190,6 +191,11 @@ const ProductPage: React.FC = () => {
               ? variant.isAvailable
               : true
           ),
+          show_in_listing: String(
+            typeof variant.showInListing === "boolean"
+              ? variant.showInListing
+              : true
+          ),
         }))
       : [{ ...INITIAL_VARIANT }];
 
@@ -298,6 +304,7 @@ const mapProductToImages = (product?: ProductResponse | null) =>
           basePrice: Number(variant.base_price) || 0,
           salePrice: variant.sale_price ? Number(variant.sale_price) : null,
           isAvailable: normalizeBoolean(variant.is_available),
+          showInListing: normalizeBoolean(variant.show_in_listing ?? "true"),
         };
         console.log("Normalized variant:", normalized);
         return normalized;

@@ -417,6 +417,18 @@ const AddProductModal: React.FC<Props> = ({
                         options={BOOLEAN_OPTIONS}
                       />
                     </div>
+                    <div className="flex items-center">
+                      <CustomCheckbox
+                        label="Show on listing"
+                        checked={(v.show_in_listing ?? "true") === "true"}
+                        onChange={(e) => {
+                          const updated = [...variants];
+                          updated[i].show_in_listing = e.target.checked ? "true" : "false";
+                          setVariants(updated);
+                        }}
+                        disabled={isReadOnly}
+                      />
+                    </div>
                   </div>
                 </div>
               ))}
@@ -437,6 +449,7 @@ const AddProductModal: React.FC<Props> = ({
                           base_price: "",
                           sale_price: "",
                           is_available: "true",
+                          show_in_listing: "true",
                         },
                       ])
                     }

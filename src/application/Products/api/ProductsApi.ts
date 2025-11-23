@@ -17,6 +17,7 @@ export type ProductVariantPayload = {
   basePrice: number;
   salePrice?: number | null;
   isAvailable?: boolean;
+  showInListing?: boolean;
 };
 
 export type ProductPayload = {
