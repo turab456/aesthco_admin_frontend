@@ -193,17 +193,18 @@ const ProductPage: React.FC = () => {
         }))
       : [{ ...INITIAL_VARIANT }];
 
-  const mapProductToImages = (product?: ProductResponse | null) =>
-    product && product.images.length
-      ? product.images.map((image, index) => ({
-          id: image.id,
-          is_primary: Boolean(image.isPrimary),
-          imageUrl: image.imageUrl,
-          sort_order:
-            typeof image.sortOrder === "number" ? image.sortOrder : index,
-          file: null,
-        }))
-      : [{ ...INITIAL_IMAGE }];
+const mapProductToImages = (product?: ProductResponse | null) =>
+  product && product.images.length
+    ? product.images.map((image, index) => ({
+        id: image.id,
+        is_primary: Boolean(image.isPrimary),
+        imageUrl: image.imageUrl,
+        color: image.color?.id ? String(image.color.id) : "",
+        sort_order:
+          typeof image.sortOrder === "number" ? image.sortOrder : index,
+        file: null,
+      }))
+    : [{ ...INITIAL_IMAGE }];
 
   const handleOpenCreate = () => {
     setModalMode("create");
@@ -320,6 +321,7 @@ const ProductPage: React.FC = () => {
               id: image.id,
               imageUrl,
               isPrimary: Boolean(image.is_primary),
+              colorId: image.color ? Number(image.color) : null,
               sortOrder:
                 typeof image.sort_order === "number"
                   ? image.sort_order
@@ -333,6 +335,7 @@ const ProductPage: React.FC = () => {
               id: image.id,
               imageUrl: image.imageUrl,
               isPrimary: Boolean(image.is_primary),
+              colorId: image.color ? Number(image.color) : null,
               sortOrder:
                 typeof image.sort_order === "number"
                   ? image.sort_order

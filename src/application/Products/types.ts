@@ -30,6 +30,7 @@ export type ImageState = {
   is_primary: boolean;
   sort_order?: number;
   imageUrl?: string;
+  color?: string;
   file: File | null;
 };
 

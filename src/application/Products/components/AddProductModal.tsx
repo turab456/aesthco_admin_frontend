@@ -105,7 +105,7 @@ const AddProductModal: React.FC<Props> = ({
   };
   
   const variantErrors = getVariantErrors(error);
-  
+
   const withFallback = (options: SelectOption[], emptyLabel: string) => {
     if (options.length === 0) {
       return [{ value: "", label: emptyLabel }];
@@ -114,6 +114,13 @@ const AddProductModal: React.FC<Props> = ({
     const hasSelectOption = options.some((opt) => opt.value === "");
     return hasSelectOption ? options : [{ value: "", label: "Select" }, ...options];
   };
+
+  const variantColorOptions = React.useMemo(() => {
+    const usedColors = Array.from(
+      new Set(variants.map((v) => v.color).filter(Boolean))
+    );
+    return masterData.colors.filter((c) => usedColors.includes(c.value));
+  }, [variants, masterData.colors]);
 
   return (
     <CustomModal
@@ -480,6 +487,21 @@ const AddProductModal: React.FC<Props> = ({
                     )}
                   </div>
                   <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                    {variantColorOptions.length > 0 && (
+                      <div>
+                        <CustomDropdown
+                          label="Associated Color (optional)"
+                          value={img.color ?? ""}
+                          onChange={(e) => {
+                            const updated = [...images];
+                            updated[i].color = e.target.value;
+                            setImages(updated);
+                          }}
+                          disabled={isReadOnly}
+                          options={[{ value: "", label: "Select" }, ...variantColorOptions]}
+                        />
+                      </div>
+                    )}
                     {!isReadOnly && (
                       <div className="lg:col-span-2">
                         <CustomInputLabel label="Upload File" required />

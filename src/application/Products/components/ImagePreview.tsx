@@ -60,6 +60,11 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                 Primary
               </div>
             )}
+            {image.color && (
+              <div className="absolute right-1 top-1 rounded bg-gray-900/80 px-2 py-0.5 text-[10px] font-semibold text-white shadow">
+                Color #{image.color}
+              </div>
+            )}
 
             {/* Remove button */}
             {!isReadOnly && onRemove && (
