@@ -4,13 +4,7 @@ import {
   DataTable,
   ColumnDef,
 } from "../../../components/custom/CustomTable/CustomTable";
-
-type ColorResponse = {
-  id: number;
-  name: string;
-  code: string;
-  hexCode: string;
-};
+import { ColorResponse } from "../types";
 
 type Props = {
   data: ColorResponse[];
@@ -43,9 +37,7 @@ const ColorsLists: React.FC<Props> = ({
       header: "Color Code",
       searchable: true,
       render: (row) => (
-        <span className="text-gray-600 dark:text-gray-400">
-          {row.code}
-        </span>
+        <span className="text-gray-600 dark:text-gray-400">{row.code}</span>
       ),
     },
     {
@@ -55,7 +47,7 @@ const ColorsLists: React.FC<Props> = ({
       render: (row) => (
         <div className="flex items-center gap-2">
           <div
-            className="w-4 h-4 rounded border border-gray-300"
+            className="h-4 w-4 rounded border border-gray-300"
             style={{ backgroundColor: row.hexCode }}
           />
           <span className="text-gray-600 dark:text-gray-400">
@@ -95,9 +87,7 @@ const ColorsLists: React.FC<Props> = ({
       columns={columns}
       defaultPageSize={10}
       enableSearchDropdown
-      buildSuggestionLabel={(row) =>
-        `${row.name} – ${row.code || ""}`
-      }
+      buildSuggestionLabel={(row) => `${row.name} - ${row.code || ""}`}
       onSuggestionSelect={(row) => onView(row)}
       actionComponent={customAction}
     />

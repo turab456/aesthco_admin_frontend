@@ -4,12 +4,7 @@ import {
   DataTable,
   ColumnDef,
 } from "../../../components/custom/CustomTable/CustomTable";
-
-type SizeResponse = {
-  id: number;
-  label: string;
-  code: string;
-};
+import { SizeResponse } from "../types";
 
 type Props = {
   data: SizeResponse[];
@@ -42,9 +37,7 @@ const SizeLists: React.FC<Props> = ({
       header: "Size Code",
       searchable: true,
       render: (row) => (
-        <span className="text-gray-600 dark:text-gray-400">
-          {row.code}
-        </span>
+        <span className="text-gray-600 dark:text-gray-400">{row.code}</span>
       ),
     },
     {
@@ -78,9 +71,7 @@ const SizeLists: React.FC<Props> = ({
       columns={columns}
       defaultPageSize={10}
       enableSearchDropdown
-      buildSuggestionLabel={(row) =>
-        `${row.code} – ${row.label || ""}`
-      }
+      buildSuggestionLabel={(row) => `${row.code} - ${row.label || ""}`}
       onSuggestionSelect={(row) => onView(row)}
       actionComponent={customAction}
     />

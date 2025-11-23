@@ -263,8 +263,9 @@ export function DataTable<T extends Record<string, Primitive>>(props: DataTableP
           {filterControls}
           {actionComponent}
           <CustomButton
-           
-           
+            fullWidth={false}
+            size="sm"
+            variant="outline"
             onClick={exportCurrentView}
           >
             Export

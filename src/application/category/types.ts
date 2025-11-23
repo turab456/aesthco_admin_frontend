@@ -1,4 +1,10 @@
 export type CategoryFormTypes = {
-  categoryName: string;
+  name: string;
   slug: string;
+};
+
+export type CategoryPayload = CategoryFormTypes;
+
+export type CategoryResponse = CategoryPayload & {
+  id: number;
 };

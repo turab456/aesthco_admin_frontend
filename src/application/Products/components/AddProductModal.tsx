@@ -441,10 +441,12 @@ const AddProductModal: React.FC<Props> = ({
 
               <div className="lg:col-span-2 pt-6">
                 <h3 className="text-lg font-semibold mb-4">Product Images</h3>
-                <ImagePreview 
-                  images={images} 
+                <ImagePreview
+                  images={images}
                   isReadOnly={isReadOnly}
-                  onRemove={(index) => setImages(images.filter((_, i) => i !== index))}
+                  onRemove={(index) =>
+                    setImages(images.filter((_, i) => i !== index))
+                  }
                 />
               </div>
 
@@ -484,7 +486,11 @@ const AddProductModal: React.FC<Props> = ({
                         <CustomFileInput
                           helperText="PNG, JPG or GIF up to 10MB"
                           selectedFileName={
-                            img.file ? img.file.name : undefined
+                            img.file
+                              ? img.file.name
+                              : img.imageUrl
+                              ? img.imageUrl.split("/").pop()
+                              : undefined
                           }
                           onChange={(e) => {
                             const file = e.target.files?.[0] || null;
@@ -492,6 +498,7 @@ const AddProductModal: React.FC<Props> = ({
                             updated[i].file = file;
                             setImages(updated);
                           }}
+                          disabled={isReadOnly}
                         />
                       </div>
                     )}

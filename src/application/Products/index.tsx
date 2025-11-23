@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import PageMeta from "../../components/common/PageMeta";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import Loader from "../../components/common/Loader";
 import { useModal } from "../../hooks/useModal";
 import ProductList from "./components/ProductList";
 import AddProductModal from "./components/AddProductModal";
@@ -9,7 +10,7 @@ import {
   VariantState,
   ImageState,
 } from "./types";
-import { CustomButton } from "../../components/custom";
+import { CustomButton, ConfirmModal } from "../../components/custom";
 import MasterApi, {
   MasterCategory,
   MasterCollection,
@@ -88,8 +89,12 @@ const ProductPage: React.FC = () => {
     useState<ProductResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [pendingDelete, setPendingDelete] = useState<ProductResponse | null>(
+    null
+  );
 
   const fetchProducts = useCallback(async () => {
     const data = await ProductsApi.list();
@@ -193,6 +198,7 @@ const ProductPage: React.FC = () => {
       ? product.images.map((image, index) => ({
           id: image.id,
           is_primary: Boolean(image.isPrimary),
+          imageUrl: image.imageUrl,
           sort_order:
             typeof image.sortOrder === "number" ? image.sortOrder : index,
           file: null,
@@ -325,6 +331,7 @@ const ProductPage: React.FC = () => {
           if (image.id) {
             return {
               id: image.id,
+              imageUrl: image.imageUrl,
               isPrimary: Boolean(image.is_primary),
               sortOrder:
                 typeof image.sort_order === "number"
@@ -374,18 +381,18 @@ const ProductPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (product: ProductResponse) => {
-    const confirmation = window.confirm(
-      `Are you sure you want to delete "${product.name}"?`
-    );
-    if (!confirmation) return;
-
+  const handleDelete = async () => {
+    if (!pendingDelete) return;
     try {
-      await ProductsApi.remove(product.id);
+      setIsDeleting(true);
+      await ProductsApi.remove(pendingDelete.id);
       await fetchProducts();
+      setPendingDelete(null);
     } catch (err) {
       console.error("Error deleting product:", err);
       alert("Failed to delete product. Please try again.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -421,20 +428,19 @@ const ProductPage: React.FC = () => {
       <div className="space-y-6">
         {loading ? (
           <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Loading products...
-            </p>
+            <Loader label="Loading products..." fullHeight />
           </div>
         ) : (
           <ProductList
             data={products}
             onView={handleOpenView}
             onEdit={handleOpenEdit}
-            onDelete={handleDelete}
+            onDelete={(product) => setPendingDelete(product)}
             customAction={
               <CustomButton
                 fullWidth={false}
                 size="sm"
+                variant="outline"
                 onClick={handleOpenCreate}
               >
                 Add Product
@@ -459,6 +465,20 @@ const ProductPage: React.FC = () => {
         isSaving={isSaving}
         fieldErrors={fieldErrors}
         error={error}
+      />
+
+      <ConfirmModal
+        isOpen={Boolean(pendingDelete)}
+        onCancel={() => {
+          if (isDeleting) return;
+          setPendingDelete(null);
+        }}
+        onConfirm={handleDelete}
+        isProcessing={isDeleting}
+        title="Delete product?"
+        message={`Are you sure you want to delete "${pendingDelete?.name}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
       />
     </>
   );

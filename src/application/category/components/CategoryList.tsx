@@ -4,12 +4,7 @@ import {
   DataTable,
   ColumnDef,
 } from "../../../components/custom/CustomTable/CustomTable";
-
-type CategoryResponse = {
-  id: number;
-  categoryName: string;
-  slug: string;
-};
+import { CategoryResponse } from "../types";
 
 type Props = {
   data: CategoryResponse[];
@@ -28,12 +23,12 @@ const CategoryList: React.FC<Props> = ({
 }) => {
   const columns: Array<ColumnDef<CategoryResponse>> = [
     {
-      key: "categoryName",
+      key: "name",
       header: "Category Name",
       searchable: true,
       render: (row) => (
         <span className="font-semibold text-gray-900 dark:text-white">
-          {row.categoryName}
+          {row.name}
         </span>
       ),
     },
@@ -42,9 +37,7 @@ const CategoryList: React.FC<Props> = ({
       header: "Slug",
       searchable: true,
       render: (row) => (
-        <span className="text-gray-600 dark:text-gray-400">
-          {row.slug}
-        </span>
+        <span className="text-gray-600 dark:text-gray-400">{row.slug}</span>
       ),
     },
     {
@@ -78,9 +71,7 @@ const CategoryList: React.FC<Props> = ({
       columns={columns}
       defaultPageSize={10}
       enableSearchDropdown
-      buildSuggestionLabel={(row) =>
-        `${row.categoryName} – ${row.slug || "Uncategorised"}`
-      }
+      buildSuggestionLabel={(row) => `${row.name} - ${row.slug || "Uncategorised"}`}
       onSuggestionSelect={(row) => onView(row)}
       actionComponent={customAction}
     />

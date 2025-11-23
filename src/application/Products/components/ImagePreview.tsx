@@ -18,6 +18,9 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     if (image.file) {
       return URL.createObjectURL(image.file);
     }
+    if (image.imageUrl) {
+      return image.imageUrl;
+    }
     return null;
   };
 

@@ -54,7 +54,18 @@ const AddCollectionModal: React.FC<Props> = ({
 
         {error && (
           <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
-            {error}
+            {error.includes(".") ? (
+              <ul className="list-inside list-disc space-y-1">
+                {error
+                  .split(". ")
+                  .filter((msg) => msg.trim())
+                  .map((msg, idx) => (
+                    <li key={idx}>{msg.trim()}.</li>
+                  ))}
+              </ul>
+            ) : (
+              error
+            )}
           </div>
         )}
 
@@ -67,12 +78,12 @@ const AddCollectionModal: React.FC<Props> = ({
                   required
                   type="text"
                   placeholder="Enter collection name"
-                  value={form.collectionName}
-                  onChange={(e) => onFormChange("collectionName", e.target.value)}
+                  value={form.name}
+                  onChange={(e) => onFormChange("name", e.target.value)}
                   disabled={isReadOnly}
                 />
-                {fieldErrors.collectionName && (
-                  <p className="mt-1 text-xs text-red-600">{fieldErrors.collectionName}</p>
+                {fieldErrors.name && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.name}</p>
                 )}
               </div>
               <div>
@@ -85,6 +96,9 @@ const AddCollectionModal: React.FC<Props> = ({
                   onChange={(e) => onFormChange("slug", e.target.value)}
                   disabled
                 />
+                {fieldErrors.slug && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.slug}</p>
+                )}
               </div>
             </div>
           </div>

@@ -39,13 +39,13 @@ const ProductList: React.FC<Props> = ({
       key: "category",
       header: "Category",
       searchable: true,
-      render: (row) => row.category?.name ?? "—",
+      render: (row) => row.category?.name ?? "-",
     },
     {
       key: "collection",
       header: "Collection",
       searchable: true,
-      render: (row) => row.collection?.name ?? "—",
+      render: (row) => row.collection?.name ?? "-",
     },
     {
       key: "status",
@@ -90,7 +90,7 @@ const ProductList: React.FC<Props> = ({
       defaultPageSize={10}
       enableSearchDropdown
       buildSuggestionLabel={(row) =>
-        `${row.name} – ${row.category?.name ?? "Uncategorised"}`
+        `${row.name} - ${row.category?.name ?? "Uncategorised"}`
       }
       onSuggestionSelect={(row) => onView(row)}
       actionComponent={customAction}

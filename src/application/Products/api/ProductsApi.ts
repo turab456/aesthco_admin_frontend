@@ -4,6 +4,7 @@ export type ProductImagePayload = {
   id?: number;
   isPrimary?: boolean;
   sortOrder?: number;
+  imageUrl?: string;
 };
 
 export type ProductVariantPayload = {
@@ -37,6 +38,7 @@ export type ProductResponse = ProductPayload & {
   images: Array<
     ProductImagePayload & {
       id: number;
+      imageUrl?: string;
     }
   >;
   variants: Array<

@@ -54,7 +54,18 @@ const AddSizesModal: React.FC<Props> = ({
 
         {error && (
           <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
-            {error}
+            {error.includes(".") ? (
+              <ul className="list-inside list-disc space-y-1">
+                {error
+                  .split(". ")
+                  .filter((msg) => msg.trim())
+                  .map((msg, idx) => (
+                    <li key={idx}>{msg.trim()}.</li>
+                  ))}
+              </ul>
+            ) : (
+              error
+            )}
           </div>
         )}
 

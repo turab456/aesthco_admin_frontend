@@ -1,4 +1,10 @@
 export type CollectionsFormTypes = {
-  collectionName: string;
+  name: string;
   slug: string;
+};
+
+export type CollectionPayload = CollectionsFormTypes;
+
+export type CollectionResponse = CollectionPayload & {
+  id: number;
 };
