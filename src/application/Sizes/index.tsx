@@ -12,6 +12,7 @@ import SizeApi from "./api/SizeApi";
 const INITIAL_FORM: SizeFormTypes = {
   code: "",
   label: "",
+  sortOrder: "",
 };
 
 const SizeManagement = () => {
@@ -64,6 +65,9 @@ const SizeManagement = () => {
     if (!form.label.trim()) {
       errors.label = "Size label is required.";
     }
+    if (form.sortOrder && Number.isNaN(Number(form.sortOrder))) {
+      errors.sortOrder = "Sort order must be a number.";
+    }
     return errors;
   };
 
@@ -82,6 +86,7 @@ const SizeManagement = () => {
       const payload = {
         code: form.code.trim(),
         label: form.label.trim(),
+        sortOrder: form.sortOrder ? Number(form.sortOrder) : undefined,
       };
       if (modalMode === "edit" && selectedItem) {
         await SizeApi.update(selectedItem.id, payload);
@@ -105,7 +110,7 @@ const SizeManagement = () => {
   const handleOpenView = (item: SizeResponse) => {
     setModalMode("view");
     setSelectedItem(item);
-    setForm({ code: item.code, label: item.label });
+    setForm({ code: item.code, label: item.label, sortOrder: item.sortOrder ? String(item.sortOrder) : "" });
     setFieldErrors({});
     setError(null);
     openModal();
@@ -114,7 +119,7 @@ const SizeManagement = () => {
   const handleOpenEdit = (item: SizeResponse) => {
     setModalMode("edit");
     setSelectedItem(item);
-    setForm({ code: item.code, label: item.label });
+    setForm({ code: item.code, label: item.label, sortOrder: item.sortOrder ? String(item.sortOrder) : "" });
     setFieldErrors({});
     setError(null);
     openModal();

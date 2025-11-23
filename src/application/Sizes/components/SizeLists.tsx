@@ -41,6 +41,16 @@ const SizeLists: React.FC<Props> = ({
       ),
     },
     {
+      key: "sortOrder",
+      header: "Sort Order",
+      searchable: false,
+      render: (row) => (
+        <span className="text-gray-600 dark:text-gray-400">
+          {row.sortOrder != null ? row.sortOrder : "-"}
+        </span>
+      ),
+    },
+    {
       key: "actions",
       header: "Actions",
       searchable: false,

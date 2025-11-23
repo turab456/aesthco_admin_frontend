@@ -100,6 +100,19 @@ const AddSizesModal: React.FC<Props> = ({
                   <p className="mt-1 text-xs text-red-600">{fieldErrors.label}</p>
                 )}
               </div>
+              <div>
+                <CustomInput
+                  label="Sort Order"
+                  type="number"
+                  placeholder="e.g., 1 for XS, 2 for S"
+                  value={form.sortOrder ?? ''}
+                  onChange={(e) => onFormChange("sortOrder", e.target.value)}
+                  disabled={isReadOnly}
+                />
+                {fieldErrors.sortOrder && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.sortOrder}</p>
+                )}
+              </div>
             </div>
           </div>
 
