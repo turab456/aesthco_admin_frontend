@@ -1,0 +1,67 @@
+export type OrderStatus =
+  | "PLACED"
+  | "CONFIRMED"
+  | "PACKED"
+  | "OUT_FOR_DELIVERY"
+  | "DELIVERED"
+  | "CANCELLED"
+  | "RETURN_REQUESTED"
+  | "RETURNED";
+
+export type PaymentMethod = "COD";
+export type PaymentStatus = "pending" | "paid" | "cancelled";
+
+export type PartnerSummary = {
+  id: string;
+  fullName: string | null;
+  email: string;
+  phoneNumber?: string | null;
+};
+
+export type OrderItem = {
+  id: number;
+  productId: number;
+  productName: string;
+  productSlug?: string | null;
+  variantId?: number | null;
+  colorId?: number | null;
+  sizeId?: number | null;
+  colorName?: string | null;
+  sizeName?: string | null;
+  sku?: string | null;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+  imageUrl?: string | null;
+};
+
+export type Order = {
+  id: string;
+  userId: string;
+  assignedPartnerId?: string | null;
+  assignedPartner?: PartnerSummary | null;
+  status: OrderStatus;
+  paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
+  subtotal: number;
+  shippingFee: number;
+  discountAmount?: number;
+  total: number;
+  addressName: string;
+  addressPhone?: string | null;
+  addressLine1: string;
+  addressLine2?: string | null;
+  city: string;
+  state: string;
+  postalCode?: string | null;
+  items: OrderItem[];
+  createdAt?: string;
+  updatedAt?: string;
+  couponCode?: string | null;
+};
+
+export type ApiResponse<T> = {
+  success: boolean;
+  message?: string;
+  data: T;
+};

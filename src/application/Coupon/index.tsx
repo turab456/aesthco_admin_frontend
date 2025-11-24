@@ -287,7 +287,7 @@ const CouponManagement: React.FC = () => {
             onEdit={handleOpenEdit}
             onToggle={handleToggle}
             actionComponent={
-              <CustomButton onClick={handleOpenCreate}>
+              <CustomButton size="sm" variant="outline" onClick={handleOpenCreate}>
                 Create Coupon
               </CustomButton>
             }

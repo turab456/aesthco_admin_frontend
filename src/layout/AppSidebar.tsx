@@ -38,6 +38,7 @@ const navItems: NavItem[] = [
     icon: <ShoppingCart />,
     name: "Order Management",
     subItems: [
+      { name: "Orders", path: "/dashboard/orders", pro: false },
       { name: "Coupons", path: "/dashboard/orders/coupons", pro: false },
       {
         name: "Shipping Threshold",

@@ -11,6 +11,7 @@ import ColorsManagement from "../application/Colors";
 import SizeManagement from "../application/Sizes";
 import CouponManagement from "../application/Coupon";
 import ShippingSettings from "../application/Shipping";
+import OrdersPage from "../application/Orders";
 
 const AppRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const AppRoutes = () => {
           <Route path="collection" element={<CollectionManagement />} />
           <Route path="colors" element={<ColorsManagement />} />
           <Route path="size" element={<SizeManagement />} />
+          <Route path="orders" element={<OrdersPage />} />
           <Route path="orders/coupons" element={<CouponManagement />} />
           <Route path="orders/shipping" element={<ShippingSettings />} />
         </Route>
