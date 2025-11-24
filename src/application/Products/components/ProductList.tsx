@@ -59,7 +59,7 @@ const ProductList: React.FC<Props> = ({
       header: "Product",
       searchable: true,
       render: (row) => (
-        <span className="text-gray-900 font-bold dark:text-white">
+        <span className="text-gray-900 font-semibold dark:text-white">
           {row.name}
         </span>
       ),

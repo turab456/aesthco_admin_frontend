@@ -21,7 +21,7 @@ const ColorsLists: React.FC<Props> = ({
   onDelete,
   customAction,
 }) => {
-  const columns: Array<ColumnDef<ColorResponse>> = [
+  const columns: Array<ColumnDef<any>> = [
     {
       key: "name",
       header: "Color Name",
@@ -57,7 +57,7 @@ const ColorsLists: React.FC<Props> = ({
       ),
     },
     {
-      key: "actions",
+      key: "id",
       header: "Actions",
       searchable: false,
       render: (row) => (
@@ -83,12 +83,12 @@ const ColorsLists: React.FC<Props> = ({
 
   return (
     <DataTable
-      data={data}
+      data={data as any}
       columns={columns}
       defaultPageSize={10}
       enableSearchDropdown
-      buildSuggestionLabel={(row) => `${row.name} - ${row.code || ""}`}
-      onSuggestionSelect={(row) => onView(row)}
+      buildSuggestionLabel={(row: any) => `${row.name} - ${row.code || ""}`}
+      onSuggestionSelect={(row: any) => onView(row as ColorResponse)}
       actionComponent={customAction}
     />
   );
