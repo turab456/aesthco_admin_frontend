@@ -41,6 +41,7 @@ interface CustomInputProps {
   required?: boolean;
   id?: string;
   name?: string;
+  helperText?: string;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -54,6 +55,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   required = false,
   id,
   name,
+  helperText,
 }) => {
   return (
     <div>
@@ -88,6 +90,11 @@ const CustomInput: React.FC<CustomInputProps> = ({
           e.currentTarget.style.borderColor = "#d1d5db";
         }}
       />
+      {helperText && (
+        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          {helperText}
+        </p>
+      )}
     </div>
   );
 };

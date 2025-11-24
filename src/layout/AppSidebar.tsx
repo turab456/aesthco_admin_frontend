@@ -7,6 +7,7 @@ import {
   ChevronDown,
   LogOut,
   ShirtIcon,
+  ShoppingCart,
 } from "lucide-react";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
@@ -31,6 +32,18 @@ const navItems: NavItem[] = [
       { name: "Category Management", path: "/dashboard/category", pro: false },
       { name: "Collections Management", path: "/dashboard/collection", pro: false },
       { name: "Product Management", path: "/dashboard/products", pro: false },
+    ],
+  },
+  {
+    icon: <ShoppingCart />,
+    name: "Order Management",
+    subItems: [
+      { name: "Coupons", path: "/dashboard/orders/coupons", pro: false },
+      {
+        name: "Shipping Threshold",
+        path: "/dashboard/orders/shipping",
+        pro: false,
+      },
     ],
   },
 ];
