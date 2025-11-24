@@ -5,6 +5,7 @@ import {
   CustomModal,
 } from "../../../components/custom";
 import { ColorFormTypes } from "../types";
+import { ChromePicker, ColorResult } from "react-color";
 
 type Props = {
   isOpen: boolean;
@@ -30,6 +31,13 @@ const AddColorsModal: React.FC<Props> = ({
   error = null,
 }) => {
   const isReadOnly = mode === "view";
+
+  const handleColorPick = (color: ColorResult) => {
+    onFormChange("hexCode", color.hex);
+    if (!form.code) {
+      onFormChange("code", color.hex.replace("#", "").toUpperCase());
+    }
+  };
 
   return (
     <CustomModal
@@ -112,6 +120,27 @@ const AddColorsModal: React.FC<Props> = ({
                 />
                 {fieldErrors.hexCode && (
                   <p className="mt-1 text-xs text-red-600">{fieldErrors.hexCode}</p>
+                )}
+                {!isReadOnly && (
+                  <div className="mt-3 space-y-3 rounded-lg border border-gray-200 p-3">
+                    <ChromePicker
+                      color={form.hexCode || "#000000"}
+                      onChange={handleColorPick}
+                      disableAlpha
+                    />
+                    <div className="flex items-center gap-2 text-sm text-gray-700">
+                      <span
+                        className="h-6 w-6 rounded border"
+                        style={{ background: form.hexCode || "#000000" }}
+                        aria-label="Selected color swatch"
+                      />
+                      <span>
+                        {(form.name || "Color").trim()}{" "}
+                        {form.code ? `(${form.code})` : ""} –{" "}
+                        {form.hexCode || "#000000"}
+                      </span>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
