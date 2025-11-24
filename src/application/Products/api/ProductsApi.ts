@@ -100,6 +100,17 @@ const ProductsApi = {
     return unwrap(response.data);
   },
 
+  async updateStatus(
+    id: string | number,
+    isActive: boolean
+  ): Promise<{ id: number | string; isActive: boolean }> {
+    const response = await apiClient.patch<ApiResponse<{ id: number | string; isActive: boolean }>>(
+      `/products/${id}/status`,
+      { isActive }
+    );
+    return unwrap(response.data);
+  },
+
   async remove(id: string | number): Promise<void> {
     const response = await apiClient.delete<ApiResponse<{ message: string }>>(
       `/products/${id}`

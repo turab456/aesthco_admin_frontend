@@ -10,7 +10,7 @@ import {
   VariantState,
   ImageState,
 } from "./types";
-import { CustomButton, ConfirmModal } from "../../components/custom";
+import { CustomButton } from "../../components/custom";
 import MasterApi, {
   MasterCategory,
   MasterCollection,
@@ -90,12 +90,9 @@ const ProductPage: React.FC = () => {
     useState<ProductResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [pendingDelete, setPendingDelete] = useState<ProductResponse | null>(
-    null
-  );
 
   const fetchProducts = useCallback(async () => {
     const data = await ProductsApi.list();
@@ -391,18 +388,16 @@ const mapProductToImages = (product?: ProductResponse | null) =>
     }
   };
 
-  const handleDelete = async () => {
-    if (!pendingDelete) return;
+  const handleConfirmStatusChange = async (product: ProductResponse, nextStatus: boolean) => {
     try {
-      setIsDeleting(true);
-      await ProductsApi.remove(pendingDelete.id);
+      setIsUpdatingStatus(true);
+      await ProductsApi.updateStatus(product.id, nextStatus);
       await fetchProducts();
-      setPendingDelete(null);
     } catch (err) {
-      console.error("Error deleting product:", err);
-      alert("Failed to delete product. Please try again.");
+      console.error("Error updating product status:", err);
+      alert("Failed to update product status. Please try again.");
     } finally {
-      setIsDeleting(false);
+      setIsUpdatingStatus(false);
     }
   };
 
@@ -445,7 +440,7 @@ const mapProductToImages = (product?: ProductResponse | null) =>
             data={products}
             onView={handleOpenView}
             onEdit={handleOpenEdit}
-            onDelete={(product) => setPendingDelete(product)}
+            onToggleActive={handleConfirmStatusChange}
             customAction={
               <CustomButton
                 fullWidth={false}
@@ -475,20 +470,6 @@ const mapProductToImages = (product?: ProductResponse | null) =>
         isSaving={isSaving}
         fieldErrors={fieldErrors}
         error={error}
-      />
-
-      <ConfirmModal
-        isOpen={Boolean(pendingDelete)}
-        onCancel={() => {
-          if (isDeleting) return;
-          setPendingDelete(null);
-        }}
-        onConfirm={handleDelete}
-        isProcessing={isDeleting}
-        title="Delete product?"
-        message={`Are you sure you want to delete "${pendingDelete?.name}"? This action cannot be undone.`}
-        confirmText="Delete"
-        cancelText="Cancel"
       />
     </>
   );

@@ -1,16 +1,20 @@
-import React from "react";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import React, { useState } from "react";
+import { Eye, Pencil } from "lucide-react";
 import {
   DataTable,
   ColumnDef,
 } from "../../../components/custom/CustomTable/CustomTable";
 import { ProductResponse } from "../api/ProductsApi";
+import { ConfirmModal } from "../../../components/custom";
 
 type Props = {
   data: ProductResponse[];
   onView: (product: ProductResponse) => void;
   onEdit: (product: ProductResponse) => void;
-  onDelete?: (product: ProductResponse) => void;
+  onToggleActive?: (
+    product: ProductResponse,
+    nextStatus: boolean
+  ) => Promise<void> | void;
   customAction?: React.ReactNode;
 };
 
@@ -18,21 +22,46 @@ const ProductList: React.FC<Props> = ({
   data,
   onView,
   onEdit,
-  onDelete,
+  onToggleActive,
   customAction,
 }) => {
+  const [pendingToggle, setPendingToggle] = useState<{
+    product: ProductResponse;
+    nextStatus: boolean;
+  } | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleToggleRequest = (product: ProductResponse) => {
+    setPendingToggle({ product, nextStatus: !product.isActive });
+  };
+
+  const handleConfirmToggle = async () => {
+    if (!pendingToggle) return;
+    if (!onToggleActive) {
+      setPendingToggle(null);
+      return;
+    }
+    try {
+      setIsProcessing(true);
+      await onToggleActive(pendingToggle.product, pendingToggle.nextStatus);
+      setPendingToggle(null);
+    } catch (error) {
+      console.error("Failed to update product status:", error);
+      alert("Failed to update product status. Please try again.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const columns: Array<ColumnDef<ProductResponse>> = [
     {
-      key: "productName",
+      key: "name",
       header: "Product",
       searchable: true,
       render: (row) => (
-        <div className="flex flex-col">
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {row.name}
-          </span>
-          <span className="text-xs text-gray-500">Slug: {row.slug}</span>
-        </div>
+        <span className="text-gray-900 font-bold dark:text-white">
+          {row.name}
+        </span>
       ),
     },
     {
@@ -48,18 +77,30 @@ const ProductList: React.FC<Props> = ({
       render: (row) => row.collection?.name ?? "-",
     },
     {
-      key: "status",
+      key: "isActive",
       header: "Status",
       searchable: true,
-      render: (row) =>
-        row.isActive ? (
-          <span className="text-green-600">Active</span>
-        ) : (
-          <span className="text-red-500">Inactive</span>
-        ),
+      render: (row) => (
+        onToggleActive && (
+          <button
+            type="button"
+            onClick={() => handleToggleRequest(row)}
+            className={`relative inline-flex h-4 w-8 items-center rounded-full transition ${
+              row.isActive ? "bg-green-500" : "bg-gray-300"
+            }`}
+            title={row.isActive ? "Deactivate product" : "Activate product"}
+          >
+            <span
+              className={`inline-block h-3 w-3 transform rounded-full bg-white shadow transition ${
+                row.isActive ? "translate-x-4" : "translate-x-0.5"
+              }`}
+            />
+          </button>
+        )
+      ),
     },
     {
-      key: "actions",
+      key: "id",
       header: "Actions",
       searchable: false,
       render: (row) => (
@@ -72,29 +113,47 @@ const ProductList: React.FC<Props> = ({
             className="h-4 w-4 cursor-pointer hover:text-green-600"
             onClick={() => onEdit(row)}
           />
-          {onDelete && (
-            <Trash2
-              className="h-4 w-4 cursor-pointer hover:text-red-600"
-              onClick={() => onDelete(row)}
-            />
-          )}
         </div>
       ),
     },
   ];
 
   return (
-    <DataTable
-      data={data}
-      columns={columns}
-      defaultPageSize={10}
-      enableSearchDropdown
-      buildSuggestionLabel={(row) =>
-        `${row.name} - ${row.category?.name ?? "Uncategorised"}`
-      }
-      onSuggestionSelect={(row) => onView(row)}
-      actionComponent={customAction}
-    />
+    <>
+      <DataTable
+        data={data as any}
+        columns={columns as any}
+        defaultPageSize={10}
+        enableSearchDropdown
+        buildSuggestionLabel={(row: any) =>
+          `${row.name} - ${row.category?.name ?? "Uncategorised"}`
+        }
+        onSuggestionSelect={(row: any) => onView(row as ProductResponse)}
+        actionComponent={customAction}
+      />
+
+      <ConfirmModal
+        isOpen={Boolean(pendingToggle)}
+        onCancel={() => {
+          if (isProcessing) return;
+          setPendingToggle(null);
+        }}
+        onConfirm={handleConfirmToggle}
+        isProcessing={isProcessing}
+        title={
+          pendingToggle?.nextStatus ? "Activate product?" : "Deactivate product?"
+        }
+        message={
+          pendingToggle
+            ? `Are you sure you want to ${
+                pendingToggle.nextStatus ? "activate" : "deactivate"
+              } "${pendingToggle.product.name}"?`
+            : ""
+        }
+        confirmText={pendingToggle?.nextStatus ? "Activate" : "Deactivate"}
+        cancelText="Cancel"
+      />
+    </>
   );
 };
 
