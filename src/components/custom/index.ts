@@ -8,3 +8,4 @@ export { default as CustomTextarea } from './CustomTextarea';
 export { default as CustomDropdown } from './CustomDropdown';
 export { default as CustomCheckbox } from './CustomCheckbox';
 export { default as ConfirmModal } from './CustomConfirmModal';
+export { default as ToggleSwitch } from './ToggleSwitch';

@@ -46,9 +46,13 @@ const MasterApi = {
     return unwrap(response.data);
   },
 
-  async getCollections(): Promise<MasterCollection[]> {
+  async getCollections(options?: { showOnHome?: boolean; limit?: number }): Promise<MasterCollection[]> {
+    const params = new URLSearchParams();
+    if (options?.showOnHome) params.set("showOnHome", "true");
+    if (options?.limit) params.set("limit", String(options.limit));
+    const query = params.toString();
     const response = await apiClient.get<ApiResponse<MasterCollection[]>>(
-      "/masters/collections"
+      `/masters/collections${query ? `?${query}` : ""}`
     );
     return unwrap(response.data);
   },

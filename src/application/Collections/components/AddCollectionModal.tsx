@@ -3,6 +3,7 @@ import {
   CustomButton,
   CustomInput,
   CustomModal,
+  ToggleSwitch,
 } from "../../../components/custom";
 import { CollectionsFormTypes } from "../types";
 
@@ -30,6 +31,7 @@ const AddCollectionModal: React.FC<Props> = ({
   error = null,
 }) => {
   const isReadOnly = mode === "view";
+  const showOrderInput = form.showOnHome;
 
   return (
     <CustomModal
@@ -98,6 +100,29 @@ const AddCollectionModal: React.FC<Props> = ({
                 />
                 {fieldErrors.slug && (
                   <p className="mt-1 text-xs text-red-600">{fieldErrors.slug}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+              <ToggleSwitch
+                label="Show on Home"
+                checked={form.showOnHome}
+                onChange={(value) => onFormChange("showOnHome", value)}
+                disabled={isReadOnly}
+                description="Enable to feature this collection on the home page."
+              />
+              <div>
+                <CustomInput
+                  label="Home Order (optional)"
+                  type="number"
+                  placeholder="e.g., 1 for top slot"
+                  value={form.homeOrder ?? ""}
+                  onChange={(e) => onFormChange("homeOrder", Number(e.target.value) || null)}
+                  disabled={isReadOnly || !showOrderInput}
+                />
+                {fieldErrors.homeOrder && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.homeOrder}</p>
                 )}
               </div>
             </div>

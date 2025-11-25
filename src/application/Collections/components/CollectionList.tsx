@@ -41,6 +41,32 @@ const CollectionList: React.FC<Props> = ({
       ),
     },
     {
+      key: "showOnHome",
+      header: "Home",
+      searchable: false,
+      render: (row) => (
+        <span
+          className={`inline-flex items-center rounded-full px-2 py-1 text-[11px] font-semibold ${
+            row.showOnHome
+              ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200"
+              : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300"
+          }`}
+        >
+          {row.showOnHome ? "Shown" : "Hidden"}
+        </span>
+      ),
+    },
+    {
+      key: "homeOrder",
+      header: "Home Order",
+      searchable: false,
+      render: (row) => (
+        <span className="text-gray-700 dark:text-gray-300">
+          {row.homeOrder ?? "-"}
+        </span>
+      ),
+    },
+    {
       key: "actions",
       header: "Actions",
       searchable: false,

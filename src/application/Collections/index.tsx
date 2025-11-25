@@ -20,6 +20,8 @@ const generateSlug = (value: string) =>
 const INITIAL_FORM: CollectionsFormTypes = {
   name: "",
   slug: "",
+  showOnHome: false,
+  homeOrder: null,
 };
 
 const CollectionManagement = () => {
@@ -82,6 +84,9 @@ const CollectionManagement = () => {
     if (!form.slug.trim()) {
       errors.slug = "Slug is required.";
     }
+    if (form.homeOrder !== null && form.homeOrder !== undefined && form.homeOrder < 0) {
+      errors.homeOrder = "Home order cannot be negative.";
+    }
     return errors;
   };
 
@@ -100,6 +105,8 @@ const CollectionManagement = () => {
       const payload = {
         name: form.name.trim(),
         slug: form.slug.trim(),
+        showOnHome: Boolean(form.showOnHome),
+        homeOrder: form.homeOrder ?? null,
       };
       if (modalMode === "edit" && selectedItem) {
         await CollectionApi.update(selectedItem.id, payload);
@@ -123,7 +130,12 @@ const CollectionManagement = () => {
   const handleOpenView = (item: CollectionResponse) => {
     setModalMode("view");
     setSelectedItem(item);
-    setForm({ name: item.name, slug: item.slug });
+    setForm({
+      name: item.name,
+      slug: item.slug,
+      showOnHome: item.showOnHome ?? false,
+      homeOrder: item.homeOrder ?? null,
+    });
     setFieldErrors({});
     setError(null);
     openModal();
@@ -132,7 +144,12 @@ const CollectionManagement = () => {
   const handleOpenEdit = (item: CollectionResponse) => {
     setModalMode("edit");
     setSelectedItem(item);
-    setForm({ name: item.name, slug: item.slug });
+    setForm({
+      name: item.name,
+      slug: item.slug,
+      showOnHome: item.showOnHome ?? false,
+      homeOrder: item.homeOrder ?? null,
+    });
     setFieldErrors({});
     setError(null);
     openModal();
