@@ -45,6 +45,7 @@ const navItems: NavItem[] = [
         path: "/dashboard/orders/shipping",
         pro: false,
       },
+      { name: "Reviews", path: "/dashboard/reviews", pro: false },
     ],
   },
 ];
