@@ -1,46 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Star, Trash2, RefreshCcw } from "lucide-react";
 import PageMeta from "../../components/common/PageMeta";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import Loader from "../../components/common/Loader";
-import {
-  ConfirmModal,
-  CustomButton,
-  CustomModal,
-  ToggleSwitch,
-} from "../../components/custom";
+import { ConfirmModal, } from "../../components/custom";
 import ReviewsApi from "./api/ReviewsApi";
 import { ReviewFilters, ReviewResponse } from "./types";
 import ReviewList from "./components/ReviewList";
+import ReviewModal from "./components/ReviewModal";
 
-const formatDate = (value?: string | null) => {
-  if (!value) return "—";
-  try {
-    return new Date(value).toLocaleDateString();
-  } catch {
-    return value;
-  }
-};
 
-const renderStars = (rating: number) => {
-  return (
-    <div className="flex items-center gap-1">
-      {Array.from({ length: 5 }).map((_, idx) => (
-        <Star
-          key={idx}
-          className={`h-4 w-4 ${
-            idx < rating ? "fill-yellow-400 text-yellow-500" : "text-gray-300"
-          }`}
-        />
-      ))}
-      <span className="ml-1 text-sm text-gray-700">{rating.toFixed(1)}/5</span>
-    </div>
-  );
-};
+
 
 const ReviewsPage: React.FC = () => {
   const [filters, setFilters] = useState<ReviewFilters>({
-    status: "pending",
+    status: "all",
     rating: null,
   });
   const [reviews, setReviews] = useState<ReviewResponse[]>([]);
@@ -252,18 +225,10 @@ const ReviewsPage: React.FC = () => {
           </div>
         </div>
 
-        <CustomButton
-          size="sm"
-          variant="outline"
-          fullWidth={false}
-          onClick={() => void refreshReviews()}
-        >
-          <RefreshCcw className="mr-2 h-4 w-4" />
-          Refresh
-        </CustomButton>
+
       </div>
 
-      <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="">
         {loading ? (
           <Loader label="Loading reviews..." fullHeight />
         ) : reviews.length === 0 ? (
@@ -289,146 +254,13 @@ const ReviewsPage: React.FC = () => {
         )}
       </div>
 
-      <CustomModal
+      <ReviewModal
         isOpen={isDetailOpen && Boolean(selectedReview)}
+        review={selectedReview}
         onClose={() => setIsDetailOpen(false)}
-        size="xl"
-        contentClassName="p-6"
-      >
-        {selectedReview && (
-          <div className="space-y-6">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-sm text-gray-500">Product</p>
-                <h4 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                  {selectedReview.product?.name || "Product removed"}
-                </h4>
-                <p className="text-sm text-gray-500">
-                  Order #{selectedReview.order?.id || "N/A"}
-                </p>
-              </div>
-              <div className="flex flex-col items-end gap-2">
-                <span
-                  className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${
-                    selectedReview.isApproved
-                      ? "bg-green-50 text-green-700"
-                      : "bg-amber-50 text-amber-700"
-                  }`}
-                >
-                  {selectedReview.isApproved ? "Approved" : "Pending"}
-                </span>
-                {selectedReview.isFeatured && (
-                  <span className="inline-flex items-center gap-2 rounded-full bg-yellow-50 px-3 py-1 text-xs font-semibold text-yellow-700">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-600" />
-                    Featured
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="rounded-lg border border-gray-100 p-4 shadow-sm dark:border-gray-800">
-                <p className="text-xs uppercase tracking-wide text-gray-500">
-                  Customer
-                </p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                  {selectedReview.user?.name || "Unknown"}
-                </p>
-                {selectedReview.user?.email && (
-                  <p className="text-xs text-gray-500">
-                    {selectedReview.user.email}
-                  </p>
-                )}
-                {selectedReview.user?.phoneNumber && (
-                  <p className="text-xs text-gray-500">
-                    {selectedReview.user.phoneNumber}
-                  </p>
-                )}
-              </div>
-              <div className="rounded-lg border border-gray-100 p-4 shadow-sm dark:border-gray-800">
-                <p className="text-xs uppercase tracking-wide text-gray-500">
-                  Order
-                </p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                  #{selectedReview.order?.id || "N/A"}
-                </p>
-                <p className="text-xs text-gray-500">
-                  Status: {selectedReview.order?.status || "Unknown"}
-                </p>
-                <p className="text-xs text-gray-500">
-                  Placed: {formatDate(selectedReview.order?.placedAt)}
-                </p>
-              </div>
-              <div className="rounded-lg border border-gray-100 p-4 shadow-sm dark:border-gray-800">
-                <p className="text-xs uppercase tracking-wide text-gray-500">
-                  Created
-                </p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                  {formatDate(selectedReview.createdAt)}
-                </p>
-                <p className="text-xs text-gray-500">
-                  Updated: {formatDate(selectedReview.updatedAt)}
-                </p>
-              </div>
-            </div>
-
-            <div className="rounded-lg border border-gray-100 bg-gray-50 p-5 shadow-sm dark:border-gray-800 dark:bg-gray-800/50">
-              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                {renderStars(selectedReview.rating)}
-                <span className="text-sm text-gray-500">
-                  {formatDate(selectedReview.createdAt)}
-                </span>
-              </div>
-              <p className="mt-3 text-gray-800 dark:text-gray-100">
-                {selectedReview.comment || "No comment provided."}
-              </p>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <ToggleSwitch
-                label="Approved"
-                checked={selectedReview.isApproved}
-                onChange={(value) =>
-                  handleModalStatusChange({
-                    isApproved: value,
-                    ...(value ? {} : { isFeatured: false }),
-                  })
-                }
-                disabled={statusUpdating}
-                description="Approved reviews are visible on the storefront."
-              />
-              <ToggleSwitch
-                label="Featured"
-                checked={selectedReview.isFeatured}
-                onChange={(value) =>
-                  handleModalStatusChange({ isFeatured: value })
-                }
-                disabled={!selectedReview.isApproved || statusUpdating}
-                description="Featured reviews are highlighted to customers."
-              />
-            </div>
-
-            <div className="flex flex-col gap-3 md:flex-row md:justify-end">
-              <CustomButton
-                variant="outline"
-                fullWidth={false}
-                onClick={() => setPendingDelete(selectedReview)}
-                disabled={statusUpdating}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete Review
-              </CustomButton>
-              <CustomButton
-                fullWidth={false}
-                onClick={() => setIsDetailOpen(false)}
-                disabled={statusUpdating}
-              >
-                Close
-              </CustomButton>
-            </div>
-          </div>
-        )}
-      </CustomModal>
+        onStatusChange={handleModalStatusChange}
+        isUpdating={statusUpdating}
+      />
 
       <ConfirmModal
         isOpen={Boolean(pendingDelete)}
