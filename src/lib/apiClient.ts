@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
 import { deleteCookie, getCookie } from "./cookies";
 import { API_BASE_URL } from "../constant";
  
@@ -15,7 +15,7 @@ apiClient.interceptors.request.use((config) => {
     getCookie("authToken");
 
   if (token) {
-    config.headers = config.headers || {};
+    config.headers = config.headers ?? new AxiosHeaders();
     config.headers.Authorization = `Bearer ${token}`;
   }
 
