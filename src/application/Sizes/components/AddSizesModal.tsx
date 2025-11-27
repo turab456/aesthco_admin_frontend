@@ -105,7 +105,7 @@ const AddSizesModal: React.FC<Props> = ({
                   label="Sort Order"
                   type="number"
                   placeholder="e.g., 1 for XS, 2 for S"
-                  value={form.sortOrder ?? ''}
+                  value={form.sortOrder?.toString() ?? ''}
                   onChange={(e) => onFormChange("sortOrder", e.target.value)}
                   disabled={isReadOnly}
                 />

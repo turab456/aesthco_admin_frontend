@@ -14,7 +14,7 @@ export type Primitive =
   | Record<string, unknown>;
 
 export type ColumnDef<T> = {
-  key: keyof T;
+  key: keyof T | string;
   header: string;
   render?: (row: T) => React.ReactNode;
   searchable?: boolean;

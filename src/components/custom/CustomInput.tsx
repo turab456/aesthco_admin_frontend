@@ -33,7 +33,7 @@ export const CustomInputLabel: React.FC<LabelProps> = ({
 interface CustomInputProps {
   type?: string;
   placeholder?: string;
-  value?: string;
+  value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   className?: string;
@@ -42,6 +42,8 @@ interface CustomInputProps {
   id?: string;
   name?: string;
   helperText?: string;
+  min?: string;
+  step?: string;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -56,6 +58,8 @@ const CustomInput: React.FC<CustomInputProps> = ({
   id,
   name,
   helperText,
+  min,
+  step,
 }) => {
   return (
     <div>
@@ -71,6 +75,8 @@ const CustomInput: React.FC<CustomInputProps> = ({
         onChange={onChange}
         disabled={disabled}
         className={className}
+        min={min}
+        step={step}
         style={{
           width: "100%",
           padding: type === "password" ? "12px 48px 12px 16px" : "12px 16px",

@@ -120,13 +120,14 @@ const CouponList: React.FC<Props> = ({
             className="h-4 w-4 cursor-pointer hover:text-blue-600"
             onClick={() => onEdit(row)}
           />
-          <Power
-            className={`h-4 w-4 cursor-pointer ${
-              row.isActive ? "text-green-600" : "text-gray-500"
-            } hover:text-black`}
-            onClick={() => onToggle(row)}
-            title={row.isActive ? "Deactivate" : "Activate"}
-          />
+          <div title={row.isActive ? "Deactivate" : "Activate"}>
+            <Power
+              className={`h-4 w-4 cursor-pointer ${
+                row.isActive ? "text-green-600" : "text-gray-500"
+              } hover:text-black`}
+              onClick={() => onToggle(row)}
+            />
+          </div>
         </div>
       ),
     },

@@ -13,6 +13,7 @@ interface CustomButtonProps {
   style?: React.CSSProperties;
   variant?: ButtonVariant;
   size?: ButtonSize;
+  isLoading?: boolean;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -25,6 +26,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   style,
   variant = "solid",
   size = "md",
+  isLoading = false,
 }) => {
   const baseColor = "#1f2937"; // gray-800 to match sidebar
   const hoverColor = "#111827"; // gray-900
@@ -47,9 +49,10 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   const baseBorderColor = isOutline ? baseColor : "transparent";
   const disabledBorderColor = isOutline ? "#d1d5db" : "transparent";
 
-  const currentBackground = disabled ? disabledBackground : baseBackground;
-  const currentTextColor = disabled ? disabledTextColor : baseTextColor;
-  const currentBorderColor = disabled ? disabledBorderColor : baseBorderColor;
+  const isDisabled = disabled || isLoading;
+  const currentBackground = isDisabled ? disabledBackground : baseBackground;
+  const currentTextColor = isDisabled ? disabledTextColor : baseTextColor;
+  const currentBorderColor = isDisabled ? disabledBorderColor : baseBorderColor;
 
   const hasCustomBackground = Boolean(style?.backgroundColor);
 
@@ -57,7 +60,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
     <button
       type={type}
       onClick={onClick}
-      disabled={disabled}
+      disabled={isDisabled}
       className={className}
       style={{
         width: fullWidth ? "100%" : "auto",
@@ -70,12 +73,12 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         fontWeight: "500",
         fontFamily: "Outfit, sans-serif",
         lineHeight: 1.2,
-        cursor: disabled ? "not-allowed" : "pointer",
+        cursor: isDisabled ? "not-allowed" : "pointer",
         transition: "background-color 0.2s ease, color 0.2s ease",
         ...style,
       }}
       onMouseEnter={(e) => {
-        if (disabled || hasCustomBackground) {
+        if (isDisabled || hasCustomBackground) {
           return;
         }
         e.currentTarget.style.backgroundColor = isOutline
@@ -83,13 +86,13 @@ const CustomButton: React.FC<CustomButtonProps> = ({
           : hoverColor;
       }}
       onMouseLeave={(e) => {
-        if (disabled || hasCustomBackground) {
+        if (isDisabled || hasCustomBackground) {
           return;
         }
         e.currentTarget.style.backgroundColor = currentBackground;
       }}
     >
-      {children}
+      {isLoading ? "Loading..." : children}
     </button>
   );
 };

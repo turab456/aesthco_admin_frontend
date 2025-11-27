@@ -37,13 +37,14 @@ export type ProductResponse = ProductPayload & {
   id: number;
   category?: { id: number; name: string; slug: string } | null;
   collection?: { id: number; name: string; slug: string } | null;
-  images: Array<
-    ProductImagePayload & {
-      id: number;
-      imageUrl?: string;
-      color?: { id: number; name: string; code: string; hexCode: string } | null;
-    }
-  >;
+  images: Array<{
+    id: number;
+    isPrimary?: boolean;
+    sortOrder?: number;
+    imageUrl?: string;
+    colorId?: number | null;
+    color?: { id: number; name: string; code: string; hexCode: string } | null;
+  }>;
   variants: Array<
     ProductVariantPayload & {
       id: number;

@@ -117,7 +117,7 @@ const AddCollectionModal: React.FC<Props> = ({
                   label="Home Order (optional)"
                   type="number"
                   placeholder="e.g., 1 for top slot"
-                  value={form.homeOrder ?? ""}
+                  value={form.homeOrder?.toString() ?? ""}
                   onChange={(e) => onFormChange("homeOrder", Number(e.target.value) || null)}
                   disabled={isReadOnly || !showOrderInput}
                 />
