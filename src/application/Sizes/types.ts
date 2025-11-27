@@ -1,7 +1,7 @@
 export type SizeFormTypes = {
   code: string;
   label: string;
-  sortOrder?: string;
+  sortOrder?: string | number;
 };
 
 export type SizePayload = SizeFormTypes;
