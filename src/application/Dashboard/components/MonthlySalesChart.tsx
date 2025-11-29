@@ -1,29 +1,27 @@
-import { useMemo, useState } from "react"
-import Chart from "react-apexcharts"
-import type { ApexOptions } from "apexcharts"
-import { Dropdown } from "../../../components/ui/dropdown/Dropdown"
-import { DropdownItem } from "../../../components/ui/dropdown/DropdownItem"
-import { MoreDotIcon } from "../../../icons"
-import type { DashboardRevenue } from "../types"
+import { useMemo } from "react";
+import Chart from "react-apexcharts";
+import type { ApexOptions } from "apexcharts";
+import type { DashboardRevenue } from "../types";
 
 type Props = {
-  revenue?: DashboardRevenue
-  loading?: boolean
-}
+  revenue?: DashboardRevenue;
+  loading?: boolean;
+};
 
 const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(
-    Number.isFinite(value) ? value : 0,
-  )
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(Number.isFinite(value) ? value : 0);
 
 export default function MonthlySalesChart({ revenue, loading = false }: Props) {
-  const [isOpen, setIsOpen] = useState(false)
+  const categories = ["Paid", "Pending", "Cancelled", "Expected"];
 
-  const categories = ["Paid", "Pending", "Cancelled", "Expected"]
   const series = useMemo(
     () => [
       {
-        name: "Revenue",
+        name: "Revenue Volume",
         data: [
           revenue?.paid ?? 0,
           revenue?.pending ?? 0,
@@ -32,90 +30,92 @@ export default function MonthlySalesChart({ revenue, loading = false }: Props) {
         ],
       },
     ],
-    [revenue],
-  )
+    [revenue]
+  );
 
   const options: ApexOptions = {
-    colors: ["#465fff"],
+    colors: ["#000000"], // Pure Black
     chart: {
-      fontFamily: "Outfit, sans-serif",
-      type: "bar",
-      height: 200,
+      fontFamily: "inherit",
+      type: "area", // Changed to Area for a "graph" look
+      height: 240,
       toolbar: { show: false },
+      zoom: { enabled: false },
     },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: "40%",
-        borderRadius: 6,
-        borderRadiusApplication: "end",
+    fill: {
+      type: "gradient",
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.4,
+        opacityTo: 0.05,
+        stops: [0, 90, 100],
       },
     },
     dataLabels: { enabled: false },
-    stroke: { show: true, width: 4, colors: ["transparent"] },
+    stroke: {
+      curve: "smooth",
+      width: 2,
+      colors: ["#000000"], // Black Line
+    },
     xaxis: {
       categories,
       axisBorder: { show: false },
       axisTicks: { show: false },
+      labels: {
+        style: { colors: "#6b7280", fontSize: "12px" },
+      },
     },
-    legend: {
-      show: true,
-      position: "top",
-      horizontalAlign: "left",
-      fontFamily: "Outfit, sans-serif",
+    yaxis: {
+      labels: {
+        formatter: (val: number) => formatCurrency(val),
+        style: { colors: "#6b7280", fontSize: "12px" },
+      },
     },
-    yaxis: { labels: { formatter: (val: number) => formatCurrency(val) } },
-    grid: { yaxis: { lines: { show: true } } },
-    fill: { opacity: 1 },
-    tooltip: { y: { formatter: (val: number) => formatCurrency(val) } },
-  }
+    grid: {
+      borderColor: "#f3f4f6", // very light gray
+      strokeDashArray: 4,
+      yaxis: { lines: { show: true } },
+    },
+    tooltip: {
+      theme: "light",
+      y: { formatter: (val: number) => formatCurrency(val) },
+      marker: { show: true },
+    },
+    markers: {
+      size: 4,
+      colors: ["#fff"],
+      strokeColors: "#000",
+      strokeWidth: 2,
+      hover: { size: 6 },
+    },
+  };
 
-  function toggleDropdown() {
-    setIsOpen((prev) => !prev)
-  }
-
-  function closeDropdown() {
-    setIsOpen(false)
-  }
-
-  const isEmpty = !revenue && !loading
+  const isEmpty = !revenue && !loading;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 shadow-theme-xs dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">Revenue Snapshot</h3>
-        <div className="relative inline-block">
-          <button className="dropdown-toggle" onClick={toggleDropdown}>
-            <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
-          </button>
-          <Dropdown isOpen={isOpen} onClose={closeDropdown} className="w-40 p-2">
-            <DropdownItem
-              onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-              View More
-            </DropdownItem>
-            <DropdownItem
-              onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-              Export
-            </DropdownItem>
-          </Dropdown>
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 shadow-sm dark:border-gray-800 dark:bg-gray-900/60 sm:px-6 sm:pt-6">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+            Revenue Analysis
+          </h3>
+          <p className="text-xs text-gray-500">Breakdown by payment status</p>
         </div>
       </div>
 
       {loading ? (
-        <div className="py-10 text-sm text-gray-500 animate-pulse dark:text-gray-400">Loading revenue...</div>
+        <div className="flex h-[240px] items-center justify-center text-sm text-gray-400 animate-pulse">
+          Loading chart...
+        </div>
       ) : isEmpty ? (
-        <div className="py-10 text-sm text-gray-500 dark:text-gray-400">No revenue data yet.</div>
+        <div className="flex h-[240px] items-center justify-center text-sm text-gray-400">
+          No revenue data available.
+        </div>
       ) : (
-        <div className="max-w-full overflow-x-auto custom-scrollbar">
-          <div className="-ml-5 min-w-[450px] xl:min-w-full pl-2">
-            <Chart options={options} series={series} type="bar" height={200} />
-          </div>
+        <div className="-ml-3 w-[calc(100%+10px)]">
+          <Chart options={options} series={series} type="area" height={240} />
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -97,12 +97,9 @@ const Dashboard = () => {
 
       <EcommerceMetrics metrics={metrics} />
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <MonthlySalesChart revenue={dashboard?.revenue} loading={loadingDashboard} />
-        </div>
-        <RecentOrders orders={orders} loading={loadingOrders} />
-      </div>
+      <MonthlySalesChart revenue={dashboard?.revenue} loading={loadingDashboard} />
+
+      <RecentOrders orders={orders} loading={loadingOrders} />
     </div>
   )
 }
