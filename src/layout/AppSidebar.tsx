@@ -26,6 +26,13 @@ const navItems: NavItem[] = [
     path: "/dashboard",
   },
   {
+    icon: <Blend />,
+    name: "User Management",
+    subItems: [
+      { name: "Users", path: "/dashboard/users", pro: false },
+    ],
+  },
+  {
     icon: <ShirtIcon />,
     name: "Clothing Management",
     subItems: [
