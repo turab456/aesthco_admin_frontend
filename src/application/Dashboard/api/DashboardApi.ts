@@ -20,10 +20,9 @@ const DashboardApi = {
     return unwrap(response.data)
   },
 
-  async fetchPartner(): Promise<DashboardPartnerPayload> {
-    const response = await apiClient.get<ApiResponse<DashboardPartnerPayload>>(
-      "/dashboard/partner",
-    )
+  async fetchPartner(partnerId?: string): Promise<DashboardPartnerPayload> {
+    const url = partnerId ? `/dashboard/partner?partnerId=${partnerId}` : "/dashboard/partner"
+    const response = await apiClient.get<ApiResponse<DashboardPartnerPayload>>(url)
     return unwrap(response.data)
   },
 }

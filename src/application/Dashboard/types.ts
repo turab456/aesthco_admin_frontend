@@ -22,6 +22,7 @@ export type DashboardOrders = {
   pending: number
   cancelled: number
   returnRequested: number
+  assigned?: number
 }
 
 export type DashboardRevenue = {
@@ -29,6 +30,10 @@ export type DashboardRevenue = {
   pending: number
   expected: number
   cancelled: number
+  assignedValue?: number
+  completedValue?: number
+  inProgressValue?: number
+  outstandingCod?: number
 }
 
 export type DashboardAdminPayload = {

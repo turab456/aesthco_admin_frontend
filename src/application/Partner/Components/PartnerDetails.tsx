@@ -1,6 +1,9 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { CustomModal } from "../../../components/custom"
+import Loader from "../../../components/common/Loader"
 import type { UserSummary } from "../../User/types"
+import DashboardApi from "../../Dashboard/api/DashboardApi"
+import type { DashboardPartnerPayload } from "../../Dashboard/types"
 
 type Props = {
   isOpen: boolean
@@ -21,16 +24,45 @@ const badgeClass = (isActive: boolean) =>
     : "inline-flex items-center rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700"
 
 const PartnerDetails: React.FC<Props> = ({ isOpen, onClose, user }) => {
+  const [dashboardData, setDashboardData] = useState<DashboardPartnerPayload | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (isOpen && user) {
+      setLoading(true)
+      // Always pass the user ID as partnerId since this component shows partner details
+      const partnerId = user.id
+      console.log('Fetching dashboard for partnerId:', partnerId, 'user role:', user.role, 'user id:', user.id)
+      DashboardApi.fetchPartner(partnerId)
+        .then(setDashboardData)
+        .catch((error) => {
+          console.error('Dashboard API error:', error)
+          setDashboardData(null)
+        })
+        .finally(() => setLoading(false))
+    }
+  }, [isOpen, user])
+
   if (!user) return null
 
-  const { orders } = user
-
-  const stats = [
-    { label: "Total orders", value: orders.orderCount },
-    { label: "Delivered", value: orders.deliveredCount },
-    { label: "Cancelled", value: orders.cancelledCount },
-    { label: "Last order", value: formatDate(orders.lastOrderAt) },
+  const stats = dashboardData ? [
+    { label: "Assigned orders", value: dashboardData.orders.assigned },
+    { label: "Completed", value: dashboardData.orders.completed },
+    { label: "Pending", value: dashboardData.orders.pending },
+    { label: "Cancelled", value: dashboardData.orders.cancelled },
+  ] : [
+    { label: "Total orders", value: user.orders?.orderCount || 0 },
+    { label: "Delivered", value: user.orders?.deliveredCount || 0 },
+    { label: "Cancelled", value: user.orders?.cancelledCount || 0 },
+    { label: "Last order", value: formatDate(user.orders?.lastOrderAt) },
   ]
+
+  const revenueStats = dashboardData ? [
+    { label: "Total assigned value", value: `₹${dashboardData.revenue.assignedValue?.toLocaleString() || 0}` },
+    { label: "Completed value", value: `₹${dashboardData.revenue.completedValue?.toLocaleString() || 0}` },
+    { label: "In progress value", value: `₹${dashboardData.revenue.inProgressValue?.toLocaleString() || 0}` },
+    { label: "Outstanding COD", value: `₹${dashboardData.revenue.outstandingCod?.toLocaleString() || 0}` },
+  ] : []
 
   return (
     <CustomModal isOpen={isOpen} onClose={onClose} size="lg" contentClassName="p-5 lg:p-8">
@@ -75,22 +107,39 @@ const PartnerDetails: React.FC<Props> = ({ isOpen, onClose, user }) => {
           </div>
         </div>
 
-        <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-          <h4 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Order performance</h4>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {stats.map((item) => (
-              <div key={item.label} className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2 dark:border-gray-800 dark:bg-gray-800/60">
-                <p className="text-xs uppercase tracking-wide text-gray-500">{item.label}</p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">{item.value}</p>
-              </div>
-            ))}
+        {loading ? (
+          <div className="rounded-xl border border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-900">
+            <Loader label="Loading dashboard data..." />
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <h4 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Order performance</h4>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {stats.map((item) => (
+                  <div key={item.label} className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2 dark:border-gray-800 dark:bg-gray-800/60">
+                    <p className="text-xs uppercase tracking-wide text-gray-500">{item.label}</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-        <div className="rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-900/50">
-          <h4 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">Shipment / Last order</h4>
-          <p className="text-sm text-gray-600">The UI shows last order date and aggregated delivery counts. If you need per-order shipment details, add a backend endpoint to return orders for a partner and we can display shipment status per order here.</p>
-        </div>
+            {revenueStats.length > 0 && (
+              <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <h4 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Revenue performance</h4>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {revenueStats.map((item) => (
+                    <div key={item.label} className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2 dark:border-gray-800 dark:bg-gray-800/60">
+                      <p className="text-xs uppercase tracking-wide text-gray-500">{item.label}</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </CustomModal>
   )

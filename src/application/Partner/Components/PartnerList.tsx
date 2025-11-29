@@ -54,32 +54,7 @@ const PartnerList: React.FC<Props> = ({
         </div>
       ),
     },
-    {
-      key: "orders",
-      header: "Orders",
-      searchable: false,
-      render: (row) => (
-        <div className="text-sm text-gray-700 dark:text-gray-300">
-          <span className="font-semibold">{row.orders.orderCount}</span> total
-          <div className="text-xs text-gray-500">
-            {row.orders.deliveredCount} delivered / {row.orders.cancelledCount}{" "}
-            cancelled
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: "lastOrderAt",
-      header: "Last Order",
-      searchable: false,
-      render: (row) => (
-        <span className="text-sm text-gray-600 dark:text-gray-300">
-          {row.orders.lastOrderAt
-            ? new Date(row.orders.lastOrderAt).toLocaleDateString()
-            : "—"}
-        </span>
-      ),
-    },
+
     {
       key: "status",
       header: "Status",
