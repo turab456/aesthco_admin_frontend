@@ -13,6 +13,13 @@ const UserApi = {
     const response = await apiClient.get<ApiResponse<UserSummary[]>>("/admin/users")
     return unwrap(response.data)
   },
+
+  async toggleActive(userId: string): Promise<{ id: string; email: string; isActive: boolean }> {
+    const response = await apiClient.patch<ApiResponse<{ id: string; email: string; isActive: boolean }>>(
+      `/admin/users/${userId}/toggle-active`
+    )
+    return unwrap(response.data)
+  },
 }
 
 export default UserApi

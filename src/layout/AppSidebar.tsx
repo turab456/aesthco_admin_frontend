@@ -29,7 +29,9 @@ const navItems: NavItem[] = [
     icon: <Blend />,
     name: "User Management",
     subItems: [
-      { name: "Users", path: "/dashboard/users", pro: false },
+      { name: "Customers", path: "/dashboard/customers", pro: false },
+      { name: "Partners", path: "/dashboard/partners", pro: false },
+
     ],
   },
   {

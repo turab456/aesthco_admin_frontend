@@ -18,7 +18,8 @@ const UserManagement = () => {
     try {
       setLoading(true)
       const data = await UserApi.list()
-      setUsers(data)
+      const customers = data.filter(user => user.role === 'customer')
+      setUsers(customers)
       setError(null)
     } catch (err: any) {
       console.error("Failed to load users:", err)
@@ -36,6 +37,21 @@ const UserManagement = () => {
   const openDetails = (user: UserSummary) => {
     setSelectedUser(user)
     setIsModalOpen(true)
+  }
+
+  const handleToggleActive = async (user: UserSummary) => {
+    try {
+      await UserApi.toggleActive(user.id)
+      setUsers(prevUsers => 
+        prevUsers.map(u => 
+          u.id === user.id ? { ...u, isActive: !u.isActive } : u
+        )
+      )
+    } catch (err: any) {
+      console.error('Failed to toggle user status:', err)
+      const message = err?.response?.data?.message || err?.message || 'Failed to update user status'
+      setError(message)
+    }
   }
 
   return (
@@ -58,6 +74,7 @@ const UserManagement = () => {
           <UserList
             data={users}
             onView={openDetails}
+            onToggleActive={handleToggleActive}
           />
         )}
       </div>
