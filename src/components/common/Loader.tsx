@@ -6,7 +6,7 @@ type LoaderProps = {
 };
 
 const Loader: React.FC<LoaderProps> = ({
-  label = "Loading...",
+  label,
   fullHeight = false,
 }) => {
   return (
@@ -17,7 +17,7 @@ const Loader: React.FC<LoaderProps> = ({
     >
       <div className="flex items-center gap-3 text-gray-700 dark:text-gray-200">
         <span className="inline-block h-10 w-10 animate-spin rounded-full border-[3px] border-gray-200 border-t-gray-800 dark:border-gray-700 dark:border-t-white" />
-        <span className="text-sm font-medium">{label}</span>
+        {label ? <span className="text-sm font-medium">{label}</span> : null}
       </div>
     </div>
   );

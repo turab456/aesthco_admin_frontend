@@ -208,7 +208,7 @@ const CollectionManagement = () => {
       <div className="space-y-6">
         {loading ? (
           <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <Loader label="Loading collections..." fullHeight />
+            <Loader  fullHeight />
           </div>
         ) : (
           <CollectionList
