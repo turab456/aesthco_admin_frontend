@@ -205,8 +205,8 @@ const mapProductToImages = (product?: ProductResponse | null) =>
         color:
           image.colorId != null
             ? String(image.colorId)
-            : image.color?.id != null
-            ? String(image.color.id)
+
+
             : "",
         sort_order:
           typeof image.sortOrder === "number" ? image.sortOrder : index,
