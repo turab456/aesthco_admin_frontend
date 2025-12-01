@@ -1,6 +1,7 @@
 import apiClient from "../../../lib/apiClient";
 
 export type ProductImagePayload = {
+  [x: string]: any;
   id?: number;
   isPrimary?: boolean;
   sortOrder?: number;
