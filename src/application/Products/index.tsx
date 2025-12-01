@@ -202,7 +202,12 @@ const mapProductToImages = (product?: ProductResponse | null) =>
         id: image.id,
         is_primary: Boolean(image.isPrimary),
         imageUrl: image.imageUrl,
-        color: image.colorId ? String(image.colorId) : "",
+        color:
+          image.colorId != null
+            ? String(image.colorId)
+            : image.color?.id != null
+            ? String(image.color.id)
+            : "",
         sort_order:
           typeof image.sortOrder === "number" ? image.sortOrder : index,
         file: null,

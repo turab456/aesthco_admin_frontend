@@ -6,12 +6,14 @@ interface ImagePreviewProps {
   images: ImageState[];
   onRemove?: (index: number) => void;
   isReadOnly?: boolean;
+  colorLookup?: Record<string, string>;
 }
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({
   images,
   onRemove,
   isReadOnly = false,
+  colorLookup,
 }) => {
   const getImageUrl = (image: ImageState): string | null => {
     // If image has a file, create a preview URL
@@ -36,6 +38,9 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       {images.map((image, index) => {
         const imageUrl = getImageUrl(image);
+        const colorLabel = image.color
+          ? colorLookup?.[image.color] ?? image.color
+          : null;
 
         return (
           <div
@@ -60,9 +65,9 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                 Primary
               </div>
             )}
-            {image.color && (
+            {colorLabel && (
               <div className="absolute right-1 top-1 rounded bg-gray-900/80 px-2 py-0.5 text-[10px] font-semibold text-white shadow">
-                Color #{image.color}
+                {colorLabel}
               </div>
             )}
 
