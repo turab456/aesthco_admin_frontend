@@ -39,6 +39,10 @@ const INITIAL_FORM: ProductFormState = {
   category_id: "",
   collection_id: "",
   is_active: "true",
+  performanceAndDurability: "",
+  fitAndDesign: "",
+  seasonalComfort: "",
+  quickAnswers: [],
 };
 
 const INITIAL_VARIANT: VariantState = {
@@ -168,6 +172,10 @@ const ProductPage: React.FC = () => {
             ? String(product.collectionId)
             : "",
           is_active: String(product.isActive),
+          performanceAndDurability: product.performanceAndDurability ?? "",
+          fitAndDesign: product.fitAndDesign ?? "",
+          seasonalComfort: product.seasonalComfort ?? "",
+          quickAnswers: product.quickAnswers ?? [],
         }
       : { ...INITIAL_FORM };
 
@@ -286,6 +294,10 @@ const mapProductToImages = (product?: ProductResponse | null) =>
       categoryId: Number(form.category_id),
       collectionId: form.collection_id ? Number(form.collection_id) : null,
       isActive: normalizeBoolean(form.is_active),
+      performanceAndDurability: form.performanceAndDurability,
+      fitAndDesign: form.fitAndDesign,
+      seasonalComfort: form.seasonalComfort,
+      quickAnswers: form.quickAnswers,
     };
 
     console.log("Raw variants before filtering:", variants);

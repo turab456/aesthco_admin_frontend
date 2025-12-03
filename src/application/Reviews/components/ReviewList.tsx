@@ -60,16 +60,7 @@ const ReviewList: React.FC<Props> = ({
         searchable: false,
         render: (row) => renderStars(row.rating),
       },
-      {
-        key: "comment",
-        header: "Comment",
-        searchable: true,
-        render: (row) => (
-          <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
-            {row.comment || "No comment"}
-          </p>
-        ),
-      },
+
       {
         key: "user",
         header: "Customer",

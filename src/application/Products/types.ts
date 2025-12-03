@@ -12,6 +12,15 @@ export type ProductFormState = {
   category_id: string;
   collection_id: string;
   is_active: string;
+  performanceAndDurability: string;
+  fitAndDesign: string;
+  seasonalComfort: string;
+  quickAnswers: QuickAnswer[];
+};
+
+export type QuickAnswer = {
+  question: string;
+  answer: string;
 };
 
 export type VariantState = {

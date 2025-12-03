@@ -222,6 +222,36 @@ const AddProductModal: React.FC<Props> = ({
                   <p className="mt-1 text-xs text-red-600">{fieldErrors.description}</p>
                 )}
               </div>
+              <div className="lg:col-span-2">
+                <CustomTextarea
+                  label="Performance & Durability"
+                  rows={3}
+                  placeholder="Details about performance and durability"
+                  value={form.performanceAndDurability}
+                  onChange={(e) => onFormChange("performanceAndDurability", e.target.value)}
+                  disabled={isReadOnly}
+                />
+              </div>
+              <div className="lg:col-span-2">
+                <CustomTextarea
+                  label="Fit & Design"
+                  rows={3}
+                  placeholder="Details about fit and design"
+                  value={form.fitAndDesign}
+                  onChange={(e) => onFormChange("fitAndDesign", e.target.value)}
+                  disabled={isReadOnly}
+                />
+              </div>
+              <div className="lg:col-span-2">
+                <CustomTextarea
+                  label="Seasonal Comfort"
+                  rows={3}
+                  placeholder="Details about seasonal comfort"
+                  value={form.seasonalComfort}
+                  onChange={(e) => onFormChange("seasonalComfort", e.target.value)}
+                  disabled={isReadOnly}
+                />
+              </div>
               <div>
                 <CustomDropdown
                   label="Gender"
@@ -275,6 +305,65 @@ const AddProductModal: React.FC<Props> = ({
                   <p className="mt-1 text-xs text-red-600">{fieldErrors.is_active}</p>
                 )}
               </div>
+
+              <div className="lg:col-span-2 pt-4">
+                <h3 className="text-lg font-semibold">Quick Answers</h3>
+              </div>
+              
+              {form.quickAnswers?.map((qa, i) => (
+                <div key={i} className="lg:col-span-2 grid grid-cols-1 gap-4 p-4 border rounded-lg dark:border-gray-700">
+                  <CustomInput
+                    label="Question"
+                    value={qa.question}
+                    onChange={(e) => {
+                      const updated = [...(form.quickAnswers || [])];
+                      updated[i].question = e.target.value;
+                      onFormChange("quickAnswers", updated);
+                    }}
+                    disabled={isReadOnly}
+                  />
+                  <CustomTextarea
+                    label="Answer"
+                    rows={2}
+                    value={qa.answer}
+                    onChange={(e) => {
+                      const updated = [...(form.quickAnswers || [])];
+                      updated[i].answer = e.target.value;
+                      onFormChange("quickAnswers", updated);
+                    }}
+                    disabled={isReadOnly}
+                  />
+                  {!isReadOnly && (
+                    <CustomButton
+                      fullWidth={false}
+                      size="sm"
+                      variant="outline"
+                      type="button"
+                      onClick={() => {
+                        const updated = form.quickAnswers.filter((_, index) => index !== i);
+                        onFormChange("quickAnswers", updated);
+                      }}
+                    >
+                      Remove
+                    </CustomButton>
+                  )}
+                </div>
+              ))}
+              
+              {!isReadOnly && (
+                <div className="lg:col-span-2">
+                  <CustomButton
+                    fullWidth={false}
+                    type="button"
+                    onClick={() => {
+                      const updated = [...(form.quickAnswers || []), { question: "", answer: "" }];
+                      onFormChange("quickAnswers", updated);
+                    }}
+                  >
+                    + Add Question
+                  </CustomButton>
+                </div>
+              )}
 
               <div className="lg:col-span-2 pt-4">
                 <h3 className="text-lg font-semibold">Variants</h3>

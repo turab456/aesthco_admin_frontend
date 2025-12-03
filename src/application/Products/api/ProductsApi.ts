@@ -30,6 +30,10 @@ export type ProductPayload = {
   categoryId: number;
   collectionId?: number | null;
   isActive: boolean;
+  performanceAndDurability?: string;
+  fitAndDesign?: string;
+  seasonalComfort?: string;
+  quickAnswers?: { question: string; answer: string }[];
   variants?: ProductVariantPayload[];
   images?: ProductImagePayload[];
 };
