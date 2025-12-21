@@ -1,5 +1,5 @@
 
-export type CouponType = "WELCOME" | "SEASONAL" | "OTHER";
+export type CouponType = "NORMAL" | "COMBO" | "WELCOME" | "SEASONAL" | "OTHER";
 export type DiscountType = "PERCENT" | "FIXED";
 
 export type CouponFormState = {
@@ -13,6 +13,8 @@ export type CouponFormState = {
   perUserLimit: string;
   minOrderAmount: string;
   maxDiscountAmount: string;
+  comboRequiredQuantity: string;
+  comboAllowedQuantity: string;
   isActive: boolean;
 };
 
@@ -27,6 +29,8 @@ export type CouponPayload = {
   perUserLimit?: number | null;
   minOrderAmount?: number | null;
   maxDiscountAmount?: number | null;
+  comboRequiredQuantity?: number | null;
+  comboAllowedQuantity?: number | null;
   isActive?: boolean;
 };
 

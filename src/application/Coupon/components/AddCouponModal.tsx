@@ -9,6 +9,8 @@ import {
 import { CouponFormState } from "../types";
 
 const COUPON_TYPE_OPTIONS = [
+  { label: "Normal", value: "NORMAL" },
+  { label: "Combo", value: "COMBO" },
   { label: "Welcome (first order)", value: "WELCOME" },
   { label: "Seasonal / Limited", value: "SEASONAL" },
   { label: "Other", value: "OTHER" },
@@ -205,6 +207,48 @@ const AddCouponModal: React.FC<Props> = ({
                 helperText="Empty = no cap"
               />
             </div>
+            {form.type === "COMBO" && (
+              <>
+                <div>
+                  <CustomInput
+                    label="Combo Required Quantity"
+                    type="number"
+                    min="1"
+                    step="1"
+                    placeholder="2"
+                    value={form.comboRequiredQuantity}
+                    onChange={(e) =>
+                      onFormChange("comboRequiredQuantity", e.target.value)
+                    }
+                    helperText="Minimum total quantity required to use this coupon"
+                  />
+                  {fieldErrors.comboRequiredQuantity && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {fieldErrors.comboRequiredQuantity}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <CustomInput
+                    label="Combo Allowed Quantity"
+                    type="number"
+                    min="1"
+                    step="1"
+                    placeholder="4"
+                    value={form.comboAllowedQuantity}
+                    onChange={(e) =>
+                      onFormChange("comboAllowedQuantity", e.target.value)
+                    }
+                    helperText="Maximum total quantity allowed for this combo"
+                  />
+                  {fieldErrors.comboAllowedQuantity && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {fieldErrors.comboAllowedQuantity}
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
           </div>
 
           <div className="flex flex-col gap-4">

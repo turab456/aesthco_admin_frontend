@@ -17,7 +17,7 @@ import { CustomButton } from "../../components/custom";
 
 const INITIAL_FORM: CouponFormState = {
   code: "",
-  type: "WELCOME",
+  type: "NORMAL",
   discountType: "PERCENT",
   discountValue: "",
   startAt: "",
@@ -26,6 +26,8 @@ const INITIAL_FORM: CouponFormState = {
   perUserLimit: "1",
   minOrderAmount: "",
   maxDiscountAmount: "",
+  comboRequiredQuantity: "",
+  comboAllowedQuantity: "",
   isActive: true,
 };
 
@@ -63,7 +65,17 @@ const CouponManagement: React.FC = () => {
   }, [fetchCoupons]);
 
   const handleFormChange = (key: keyof CouponFormState, value: any) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
+    setForm((prev) => {
+      if (key === "type" && value !== "COMBO") {
+        return {
+          ...prev,
+          type: value,
+          comboRequiredQuantity: "",
+          comboAllowedQuantity: "",
+        };
+      }
+      return { ...prev, [key]: value };
+    });
   };
 
   const mapCouponToForm = useCallback(
@@ -100,6 +112,16 @@ const CouponManagement: React.FC = () => {
           coupon.maxDiscountAmount !== null
             ? coupon.maxDiscountAmount.toString()
             : "",
+        comboRequiredQuantity:
+          coupon.comboRequiredQuantity !== undefined &&
+          coupon.comboRequiredQuantity !== null
+            ? coupon.comboRequiredQuantity.toString()
+            : "",
+        comboAllowedQuantity:
+          coupon.comboAllowedQuantity !== undefined &&
+          coupon.comboAllowedQuantity !== null
+            ? coupon.comboAllowedQuantity.toString()
+            : "",
         isActive: Boolean(coupon.isActive),
       };
     },
@@ -135,6 +157,26 @@ const CouponManagement: React.FC = () => {
       errors.globalMaxRedemptions =
         "Global redemption limit must be 1 or more.";
     }
+    if (form.type === "COMBO") {
+      const requiredQty = Number(form.comboRequiredQuantity);
+      if (Number.isNaN(requiredQty) || requiredQty < 1) {
+        errors.comboRequiredQuantity =
+          "Combo required quantity must be at least 1.";
+      }
+      const allowedQty = Number(form.comboAllowedQuantity);
+      if (Number.isNaN(allowedQty) || allowedQty < 1) {
+        errors.comboAllowedQuantity =
+          "Combo allowed quantity must be at least 1.";
+      }
+      if (
+        errors.comboRequiredQuantity === undefined &&
+        errors.comboAllowedQuantity === undefined &&
+        allowedQty < requiredQty
+      ) {
+        errors.comboAllowedQuantity =
+          "Combo allowed quantity must be greater than or equal to required quantity.";
+      }
+    }
     return errors;
   };
 
@@ -155,6 +197,14 @@ const CouponManagement: React.FC = () => {
     maxDiscountAmount: form.maxDiscountAmount
       ? Number(form.maxDiscountAmount)
       : null,
+    comboRequiredQuantity:
+      form.type === "COMBO" && form.comboRequiredQuantity
+        ? Number(form.comboRequiredQuantity)
+        : null,
+    comboAllowedQuantity:
+      form.type === "COMBO" && form.comboAllowedQuantity
+        ? Number(form.comboAllowedQuantity)
+        : null,
     isActive: form.isActive,
   });
 
